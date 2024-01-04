@@ -1,0 +1,945 @@
+Features of OOps concept?
+Difference between interface and abstract class?
+What is method overloading? 
+What is method overriding?
+Can we override static method?
+Different Access Modifiers
+predicate, consumer, function, supplier.
+What is Runnable interface? Create a thread using Runnable interface?
+Different ways of creating threads in java. which is more efficient and why?
+What is Callable interface?
+What is the difference between Runnable and Callable interface in java?
+Behaviour of default method and static method in functional interface. 
+Difference between intermediate and terminal operations in stream api.
+What is immutable object? How to create an immutable class?
+Why is String immutable?
+What are different design patterns? 
+Explain Factory Pattern in java?
+What is singleton design pattern. How would you make it thread-safe in multi-threaded environment? 
+What is serialization and Deserialization?
+Difference between stack and heap?
+Difference between map and flat map.
+Difference between stream and parallel stream.
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+[1] Features of OOPs Concept?
+Abstraction --> 
+Abstraction hides the internal implementation and only the functional details will be available to users. Abstraction can be achieved with either abstract classes or interfaces.
+Example--> 
+	interface Operation{				(Operations performed by subscribers)
+		//abstract methods
+	}
+	//various implementation classes
+Example2--> interface Insurance{
+		//Abstract methods related to insurance Insurance Details		
+	}
+	
+Encapsulation--> Encapsulation hides the data from external world. It protects the data within the class and exposes methods to the world.
+class Employee{
+	private int empId;
+	private long salary;
+	public Employee(int empId, long salary) {
+ this.empId = empId;
+ this.salary = salary;
+	}
+	public void printEmployee() {
+		System.out.println(empId+"/t"+salary);
+	}
+}
+
+
+Inheritence--> Inheritence is a mechanism in which one object acquires properties and behaviours of its parent object. 
+Types of Inheritence
+1. Single Inheritence 
+2. Multiple Inheritence
+3. Multi-level Inheritence 
+4. Cyclic Inheritence
+5. Hybrid Inheritence 
+6. Hierarchy Inheritency
+
+
+Polymorphism--> It is the process of one form behaving differently in different cases. 
+Types of Polymorphism
+1. Static polymorphism or (compile time polymorphism)  - Achieved by method overloading
+2. Runtime Polymorphism - (Method overriding + Dynamic Dispatch)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+[2] Difference between interface and abstract class? 
+Ans:
+
+Abstract class does not use default keyword to provide default implementation of method. interface use default keyword to provide default implementation of a method.
+Abstract class can have final, non-final, static and non-static variables. interface has only static and final variables.
+Abstract class does not support multiple inheritence. nterface supports multiple inheritence.
+Abstract class can provide the implementation of interface. interface can not provide the implementation of abstract.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+[3] What is method overloading?
+Ans:
+Writing more than one method with same name inside a class is called method overloading.
+While Method overloading
+	Method name should be same.
+	Return type can be anything. 
+	Parameters should be different in terms of 
+		1)Types of parameters 
+		2)Sequence of parameters
+		3)Number of parameters
+		
+[4] What is method overriding
+Method overriding is done in sub-class. 
+In order to override the method
+	Method name must be same
+	Return type must be same as that of super class. 
+	Method parameters must be same as that of super class. 
+	Access modifier of the method should be equal or of higher priority than that of super class
+		public >> protected >> default >> private
+		
+
+5) Can we override static method in java?
+No, static methods are not associated with the instance of a class, but with the class itself.
+
+
+6) Different Access Modifiers
+
+
+21) Difference between early binding and late binding? 
+Early Binding is resolved by compiler at compile time. static, private and final methods are examples of early binding. 
+Compiler knows about which method should be called based on the reference variable of the class and the method defined in that class.
+	MyClass a = //;
+	a.show();		(Compiler knows that show() of MyClass should be called)
+If there is no dynamic dispatch, method invocation is resolved during compilation. 	(That means compiler is right)
+If there is dynamic dispatch, but not method overriding, method invocation is resolved during compilation.    (That means compiler is right)
+Example1:
+public class NewClass {
+	public static class superclass {
+		static void print()
+		{
+			System.out.println("print in superclass.");
+		}
+	}
+	public static class subclass extends superclass {
+		static void print()
+		{
+			System.out.println("print in subclass.");
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		superclass A = new superclass();
+		superclass B = new subclass();
+		A.print();
+		B.print();
+	}
+}
+
+Example2: 	(In this example, no dynamic dispath. Method invocation is resolved at compilation)
+public class Hello{
+	
+	public void show(){
+		System.out.println("Show() in Hello");
+	}
+	public void show(int i){
+		System.out.println("show(int) in Hello);
+	}
+	
+}
+public class Main{
+	public static void main(String args[]){
+		Hello h = new Hello();
+		h.show();
+	}
+}
+
+
+Late Binding-In the late binding or dynamic binding, the compiler doesn’t decide the method to be called. Combination of method overriding and dynamic dispatch is a perfect example of dynamic binding. In overriding both parent and child classes have the same method.
+public class NewClass {
+	public static class superclass {
+		void print()
+		{
+			System.out.println("print in superclass.");
+		}
+	}
+
+	public static class subclass extends superclass {
+		@Override
+		void print()
+		{
+			System.out.println("print in subclass.");
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		superclass A = new superclass();
+		superclass B = new subclass();
+		A.print();
+		B.print();
+	}
+}
+	
+
+Question: Different Access Modifiers in java?
+public --> 
+protected --> The access level of a protected modifier is within the package and outside the package through the child class. If you do not make the child class, it cannot be accessed from outside the 		package.	(Within the same package, can be accessed using object or inheritence)
+default --> The access level of a default modifier is only within the package. It cannot be accessed from outside the package.	(Within the same package, can be accessed using object or inheritence)
+private
+
+
+
+Question: Define function, predicate, consumer and supplier?
+Ans
+java.util.function.Function
+--------------------------------
+public interface Function<T,R)
+{
+	public abstract <R> apply(T);
+}
+
+java.util.function.Predicate
+-------------------------------
+public interface Predicate<T>
+{
+	public abstract boolean test(T);
+}
+
+java.util.function.Consumer
+--------------------------------
+public interface Consumer<T>
+{
+	public abstract void accept(T);
+}
+
+java.util.function.Supplier
+-----------------------------------
+public interface Supplier<T>
+{
+	public abstract T method_name();
+}
+
+
+
+
+Question: What is Runnable interface? Create a thread using Runnable interface?
+Ans:
+java.lang.Runnable  
+java.lang.Runnable is a functional interface that is to be implemented by a class whose instances are intended to be executed by a thread. This is the one way when we are directly using Runnable interface by implementing it. 
+public class Hello {
+	public static void main(String[] args) {
+		Hai h = new Hai();
+		Thread t = new Thread(h);
+		t.start();
+	}
+	
+}
+class Hai implements Runnable{
+	public void run() {
+		System.out.println("run() in Hai");
+	}
+}
+
+
+
+
+Question: Different ways of creating threads in java. which is more efficient and why?
+Ans:
+Any thread that we create implements Runnable interface directly or indirectly.
+By extending Thread class.
+By implementing Runnable interface directly. 
+By implementing callable interface.
+
+Implementing Runnable interface is more efficient
+Java does not allow multiple inheritence. Moreover, when we extend Thread class it consumes more memory and computation time as it adds the overhead of using additional methods. So, implementing Runnable interface is better option. 
+
+
+Question: What is Callable interface?
+Ans:
+It is a functional interface. With the implementation of Callable interface, it is possible for a thread to return something when it completes its execution. 
+Callable interface is generic in nature and has an abstract method which returns a generic type. 
+class Hai implements Callable<Integer>{
+	
+	public Integer call() {
+		
+		Random random = new Random();
+		Integer randNum = random.nextInt(10);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		return randNum;
+	}
+}
+
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
+public class Hello {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
+		
+//		FutureTask<Integer> [] f = new FutureTask[10];
+//		
+//		for(int i=0;i<10;i++) {
+//			
+//			Callable<Integer> c = new Hai();
+//			f[i] = new FutureTask(c);
+//			
+////			Thread t = new Thread(f[i]);
+////			t.start();
+//		}		
+//		for(int i=0;i<10;i++) {
+//			Integer ii=f[i].get();
+//			System.out.println("The random number is: "+ii);
+//		}
+		Callable<Integer> c = new Hai();
+		FutureTask<Integer> f = new FutureTask<Integer>(c);
+		Thread t = new Thread(f);
+		t.start();
+		
+		Integer ii =f.get();
+		System.out.println(ii);
+	}
+	
+}
+
+When call() terminates, the result should be stored to the main. For this, Future object is used, which holds result obtained from the different thread, which is sent from the call() method. 
+Future is an interface. We use FutureTask which implements Runnable as well as Future interface.  
+
+
+Question: What is the difference between Runnable and Callable interface in java?
+Ans:
+Callable interface define call(), whereas Runnable interface defines run().
+Callable interface is generic type and call() method also returns generic type. Whereas Runnable inteface is non-generic, the return type of run() of Runnable is void. 
+call() method in Callable interface can throw an exception. Whereas, run() in Runnable interface does not throw an exception. 
+Thread can not be created using Callable interface whereas a thread can be created using Runnable interface. 
+
+
+
+Question: Behaviour of default method and static method in functional interface. 
+Ans:
+default method was introduced in java 8 to support backward compatibility. It allows developers to add new methods in interface with default implementations, and implementation classes does not to override them, making it easier to update and enhance libraries without causing distruptions in existing codebases. 
+
+// A simple program to Test Interface default 
+// methods in java 
+interface TestInterface 
+{ 
+    // abstract method 
+    public void square(int a); 
+  
+    // default method 
+    default void show() 
+    { 
+      System.out.println("Default Method Executed"); 
+    } 
+} 
+  
+class TestClass implements TestInterface 
+{ 
+    // implementation of square abstract method 
+    public void square(int a) 
+    { 
+        System.out.println(a*a); 
+    } 
+  
+    public static void main(String args[]) 
+    { 
+        TestClass d = new TestClass(); 
+        d.square(4); 
+  
+        // default method executed 		(Since, TestClass is not overriding default method, so default method of parent class will be invoked)
+        d.show(); 
+    } 
+} 
+
+Output:
+16
+Default Method Executed
+
+>>> Default Methods and Multiple Inheritance
+In case, implementation class implements both the interfaces with same default method, then implementation class must provide implemetation for default method. It is necessary in both the cases whether you want to use default method of interfaces or not. 
+If we want to use default methods implementation of interfaces, we will have to use super keyword. 
+public interface Interface1 {
+	
+	default void show() {
+		System.out.println("show() in Interface1");
+	}
+}
+
+public interface Interface2 {
+
+	default void show() {
+		System.out.println("show() in Interface2");
+	}
+}
+
+public class Test implements Interface1,Interface2{
+
+	public void show() {
+		Interface1.super.show();
+		Interface2.super.show();
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+}
+
+
+ 
+static methods: static methods of interface also contains body, but we can not override them in our implementation classes that helps us in avoiding undesired results in case of poor implementation in implementation classes. 
+
+
+Question: Difference between intermediate and terminal operations in stream api.
+Ans:
+The operations which return another stream as a result are called intermediate operation and the operations which return non-stream values like primitive or object or collection or return nothing are called terminal operations. 
+Intermediate operations--> map(), filter(), distinct(), sorted(), limit(), skip()
+Terminal Operations--> forEach(), collect(), reduce(), toArray(), min(), max(), count(), findFirst(), findAny()
+
+
+Question: What is immutable object? How to create an immutable class?
+Ans:
+An object whose contents can not be changed is called immutable object and the class that is used to create this object is immutable class. 
+For example, String class is immutable class and String objects are immutable. 
+Immutability has various benefits:-
+1:- Immutable objects are used for caching purposes, we don't have worry about the value changes. 
+2:- An immutable class is inherently thread-safe, in multi-threaded environments. 
+
+For Immutable classes:-
+------------------------------------------
+- All data fields must be private. 
+- There can not be any setter methods. 
+- No getter method can return data field that is mutable
+	--> if a getter method returns an object, that object should be immutable. 
+	--> Applies to data fields of reference type (objects)
+
+class C1
+{
+	private int x;
+
+	public C1(int x)
+	{
+		this.x=x;
+	}
+	public int getX()
+	{
+		return this.x;
+	}
+}
+Class C1 is immutable. 
+------------------------------
+
+class C2
+{
+	private int x;
+	public C2(int x)
+	{
+		this.x=x;
+	}
+	public void setX(int x)
+	{
+		this.x=x;
+	}
+}
+class C2 is mutable, becauuse we can change the value of x using setX method. 
+-------------------------------------
+
+class C1
+{
+	private int x;
+	private C2 c2;
+	
+	public C1(int x, C2 c2)
+	{
+		this.x=x;
+		this.c2=c2;
+	}
+	public int getX()
+	{
+		this.x;
+	}
+}
+Here C1 is immutable.
+-------------------------------------------
+
+class C1
+{
+	private int x;
+	private C2 c2;
+	public C1(int x, C2 c2)
+	{
+		this.x=x;
+		this.c2=c2;
+	}
+	public C2 getC2()
+	{
+		return this.C2;
+	}
+	public int getX()
+	{
+		this.x;
+	}
+}
+class C1 is mutable, because getC2() method return object of C2 type which is mutable. 
+Why?
+	public static void main(String args[])
+	{
+		C1 c1 = new C1(1, new C2(1));
+		C2 c2 = c1.getC2();
+		c2.setX(2);
+	}
+	
+	
+Question: Why is String immutable?
+Ans: 
+Security:- Strings are widely used to store sensitive information like passwords. Immutability ensures that once a String is created with sensitive information, its value can not be altered. 
+Thread-Safety:- They can be shared among multiple threads without using synchronization. This is because no thread can manipulate threads once they are created. 
+Caching:
+Hashing:- The immutability of Strings allows them to be used as keys in Hash based data structures like HashMap or HashSet. 
+
+
+Question: What are different design patterns? 
+Ans:
+Different categories of Design Patterns in java:
+1: Creational Design pattern --> Provide solutions to instantiate an object in the best possible way for specific situations. 
+	Singleton Design pattern 
+	Factory Design pattern	(Also known as Factory Method Design Pattern)
+	Abstract Factory Pattern 	(Factory of Factory Design Pattern)
+	Prototype Pattern
+2: Structural Design Pattern --> Provide solutions to create class structure
+	Adapter pattern 
+	Facade pattern 
+	Proxy Pattern
+3: Behavioural Design Pattern 
+	Template Method Pattern 
+	Mediator Pattern
+
+Question: Explain Factory Pattern in java?
+Ans: 
+The Factory pattern is used when we have super class and multiple sub-classes and based on the input, we need to return one of the sub-class. Super class in factory pattern can be interface, abstract class or a normal class. 
+
+
+Question: What is singleton design pattern. How would you make it thread-safe in multi-threaded environment? 
+Ans:
+Singleton pattern restricts the instantiation of class and ensures that only one instance of the class exists in java virtual machine. 
+There are different approaches to create java singleton pattern, but all of them have common features like
+- private constructor
+- private static final reference variable of the same class. 
+- public static method that returns the reference variable. 
+
+Eager Initialization
+-------------------------
+The instance of the singleton class is created at the time of class loading. Also, this method does not provide any exception handling.  
+
+package com.journaldev.singleton;
+
+public class EagerInitializedSingleton {
+
+    private static final EagerInitializedSingleton instance = new EagerInitializedSingleton();
+
+    // private constructor to avoid client applications using the constructor
+    private EagerInitializedSingleton(){}
+
+    public static EagerInitializedSingleton getInstance() {
+        return instance;
+    }
+}
+
+static block Initialization
+--------------------------------------
+static block initialization is similar to eager initialization, except that instance of the class is created in static block that provides the option for exception handling. 
+
+
+public class StaticBlockSingleton {
+
+    private static StaticBlockSingleton instance;
+
+    private StaticBlockSingleton(){}
+
+    // static block initialization for exception handling
+    static {
+        try {
+            instance = new StaticBlockSingleton();
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred in creating singleton instance");
+        }
+    }
+
+    public static StaticBlockSingleton getInstance() {
+        return instance;
+    }
+}
+
+
+Lazy Initialization
+-------------------------
+For lazy initialization, singleton pattern creates the instance in the global access method. 
+
+public class LazyInitializedSingleton {
+
+    private static LazyInitializedSingleton instance;
+
+    private LazyInitializedSingleton(){}
+
+    public static LazyInitializedSingleton getInstance() {
+        if (instance == null) {
+            instance = new LazyInitializedSingleton();
+        }
+        return instance;
+    }
+}
+
+
+The previous method works fine in single-threaded environment. But, when it comes to multi-threaded environment, it may cause problem. For example, if two threads are inside if condition, there will be two instances. 
+
+
+Thread-Safe Singleton
+-------------------------------
+By making global access method synchronized so that only one thread can execute this method at a time. 
+
+public class ThreadSafeSingleton {
+
+    private static ThreadSafeSingleton instance;
+
+    private ThreadSafeSingleton(){}
+
+    public static synchronized ThreadSafeSingleton getInstance() {
+        if (instance == null) {
+            instance = new ThreadSafeSingleton();
+        }
+        return instance;
+    }
+
+}
+
+Double-checked locking principle
+-----------------------------------------
+public static ThreadSafeSingleton getInstanceUsingDoubleLocking() {
+    if (instance == null) {
+        synchronized (ThreadSafeSingleton.class) {
+            if (instance == null) {
+                instance = new ThreadSafeSingleton();
+            }
+        }
+    }
+    return instance;
+}
+
+
+-----------------------------------------------------------------------------------------------------------------
+Prior to java 5, the java memory model had lots of issues, and the previous approaches used to fail in certain scenarios where too many threads tried to get the instance of singleton class simulateously.
+Bill Pugh approach:- In this approach, we use inner static helper class. 
+
+public class BillPughSingleton {
+
+    private BillPughSingleton(){}
+
+    private static class SingletonHelper {
+        private static final BillPughSingleton INSTANCE = new BillPughSingleton();
+    }
+
+    public static BillPughSingleton getInstance() {
+        return SingletonHelper.INSTANCE;
+    }
+}
+
+
+ When the singleton class is loaded, SingletonHelper class is not loaded into memory and only when someone calls the getInstance() method, this class gets loaded and creates the singleton class instance.
+This approach does not require synchronization. 
+
+Using Reflection To Destroy Singleton Pattern
+--------------------------------------------------------
+package com.journaldev.singleton;
+
+import java.lang.reflect.Constructor;
+
+public class ReflectionSingletonTest {
+
+    public static void main(String[] args) {
+        EagerInitializedSingleton instanceOne = EagerInitializedSingleton.getInstance();
+        EagerInitializedSingleton instanceTwo = null;
+        try {
+            Constructor[] constructors = EagerInitializedSingleton.class.getDeclaredConstructors();
+            for (Constructor constructor : constructors) {
+                // This code will destroy the singleton pattern
+                constructor.setAccessible(true);
+                instanceTwo = (EagerInitializedSingleton) constructor.newInstance();
+                break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(instanceOne.hashCode());
+        System.out.println(instanceTwo.hashCode());
+    }
+
+}
+Here, hashCodes of both the instances will be different. 
+
+Enum Singleton
+--------------------------
+To overcome this situation, Joshua Block suggests the use of enum, because enum are instantiated only once and they are globally accessible. However, the drawback with Enum singleton is that they do not allow lazy initialization. 
+
+public enum EnumSingleton {
+
+    INSTANCE;
+
+    public static void doSomething() {
+        // do something
+    }
+}
+
+
+Serialization and Singleton
+--------------------------------------
+The problem with serialized singleton class is that, when we deserialize it, it will create a new instance of the class. 
+
+
+import java.io.Serializable;
+
+public class SerializedSingleton implements Serializable {
+
+    private static final long serialVersionUID = -7604766932017737115L;
+
+    private SerializedSingleton(){}
+
+    private static class SingletonHelper {
+        private static final SerializedSingleton instance = new SerializedSingleton();
+    }
+
+    public static SerializedSingleton getInstance() {
+        return SingletonHelper.instance;
+    }
+
+}
+
+
+public class SingletonSerializedTest {
+
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+        SerializedSingleton instanceOne = SerializedSingleton.getInstance();
+        ObjectOutput out = new ObjectOutputStream(new FileOutputStream(
+                "filename.ser"));
+        out.writeObject(instanceOne);
+        out.close();
+
+        // deserialize from file to object
+        ObjectInput in = new ObjectInputStream(new FileInputStream(
+                "filename.ser"));
+        SerializedSingleton instanceTwo = (SerializedSingleton) in.readObject();
+        in.close();
+
+        System.out.println("instanceOne hashCode="+instanceOne.hashCode());
+        System.out.println("instanceTwo hashCode="+instanceTwo.hashCode());
+
+    }
+
+}
+It will give different hashCodes. 
+To resolve this issue, we will need to provide implementation of readResolve() method. 
+protected Object readResolve() {
+    return getInstance();
+}
+
+
+Question: What is serialization and Deserialization?
+Ans: 
+Serialization in java allows us to convert java object into stream that we can over the network or save into a file or database. Deserialization is the process of converting object stream into java object so that we can use it in our programe. 
+In order to make a java object serializable, we need to implement java.io.Serializable. It is a markder interface. 
+import java.io.Serializable;
+
+public class Employee implements Serializable {
+
+//	private static final long serialVersionUID = -6470090944414208496L;
+	
+	private String name;
+	private int id;
+	transient private int salary;
+//	private String password;
+	
+	@Override
+	public String toString(){
+		return "Employee{name="+name+",id="+id+",salary="+salary+"}";
+	}
+	
+	//getter and setter methods
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getSalary() {
+		return salary;
+	}
+
+	public void setSalary(int salary) {
+		this.salary = salary;
+	}
+
+//	public String getPassword() {
+//		return password;
+//	}
+//
+//	public void setPassword(String password) {
+//		this.password = password;
+//	}
+	
+}
+
+If you want an object property to be not serialized to stream, you can use transient keyword like I have done with salary variable. 
+
+public class SerializationUtil {
+
+	// deserialize to Object from given file
+	public static Object deserialize(String fileName) throws IOException,
+			ClassNotFoundException {
+		FileInputStream fis = new FileInputStream(fileName);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		Object obj = ois.readObject();
+		ois.close();
+		return obj;
+	}
+
+	// serialize the given object and save it to file
+	public static void serialize(Object obj, String fileName)
+			throws IOException {
+		FileOutputStream fos = new FileOutputStream(fileName);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(obj);
+
+		fos.close();
+	}
+
+}
+
+Let's write Test program:-
+----------------------------
+
+public class SerializationTest {
+	
+	public static void main(String[] args) {
+		String fileName="employee.ser";
+		Employee emp = new Employee();
+		emp.setId(100);
+		emp.setName("Pankaj");
+		emp.setSalary(5000);
+		
+		//serialize to file
+		try {
+			SerializationUtil.serialize(emp, fileName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		Employee empNew = null;
+		try {
+			empNew = (Employee) SerializationUtil.deserialize(fileName);
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("emp Object::"+emp);
+		System.out.println("empNew Object::"+empNew);
+	}
+}
+Output: 
+emp Object::Employee{name=Pankaj,id=100,salary=5000}
+empNew Object::Employee{name=Pankaj,id=100,salary=0}
+
+Since salary is a transient variable, it’s value was not saved to file and hence not retrieved in the new object. Similarly static variable values are also not serialized since they belongs to class and not object.
+
+Some of the changes in class that will not affect the deserialization process are:
+>>Adding new variables to the class
+>>Changing the variables from transient to non-transient, for serialization it’s like having a new field.
+>>Changing the variable from static to non-static, for serialization it’s like having a new field.
+But for all these changes to work, the java class should have serialVersionUID defined for the class. 
+The reason is clear that serialVersionUID of the previous class and new class are different. Actually if the class doesn’t define serialVersionUID, it’s getting calculated automatically and assigned to the class. Java uses class variables, methods, class name, package etc to generate this unique long number. 
+
+
+Question: Difference between stack and heap?
+Ans:
+The major difference between stack and heap is the stack stores the order of method execution, local variables, and local reference variables while heap stores the objects, class level variables and it uses dynamic memory allocation and deallocation.
+
+Memory allocated to stack lives until the method is processed completely.
+Heap memory is managed by garbage collector and exists as long as application runs.
+
+Stack follows the LIFO order. 
+Heap does not follow any order because it is a dynamic memory allocation.
+
+When a thread is created, the operating system automatically allocates the stack.
+Heap is created when jvm is starts up and used by the application as long as the application runs.
+
+Stack throws java.lang.StackOverflowError if stack is full.
+Heap throws java.lang.OutOfMemoryError if heap space is full.
+
+
+When does dynamic binding happen?
+When sub-class object reference is referred by super-class object reference varialbe. 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

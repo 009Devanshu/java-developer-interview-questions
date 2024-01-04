@@ -1,0 +1,117 @@
+HPH Connect 
+-----------------------
+Role---> Software Engineer
+Client-Name----> Harvard Pilgrim Health Care, USA 
+Team Size --> 9
+
+This project manages the subscribers for various types of health insurance policies. Subscribers can be registered through a broker on behalf of an employer. One party id is assigned to the subscriber. 
+The same party id is used for the dependents. 
+Subscribers can edit the information of dependents but dependents can not edit the information of subscribers. Employer can also directly contact provider who is providing insurance. Before enrolment for the employer, employer has to fill some pre-enrolment form. Based on the information, filled in the form, insurance provider company will give the rates for the policies. This application is connected with various other applications supporting for the provider company. 
+
+-------------------------------------------------------------
+PartyID Assignement
+-------------------------------------------------------------
+Subscriber Registration 
+---------------------------------
+When a subscriber is registered through a broker, a new record is created in the subscriber entity in the database. 
+A unique party id is generated, using a system generated identifier (e.g UUID)
+	java.util.UUID---> UUID id  = UUID.randomUUID();
+	
+Dependents Registration 
+----------------------------------
+The partyId serves as the foreign key in the dependent entity, establishing a relationship between subscriber and its dependents. 
+
+
+Spring Data JPA Entities
+------------------------------
+
+CREATE TABLE Subscriber (
+    id INT PRIMARY KEY,
+    partyId VARCHAR(255) UNIQUE,
+    -- Other subscriber fields...
+);
+
+CREATE TABLE Dependent (
+    id INT PRIMARY KEY,
+    partyId VARCHAR(255),
+    FOREIGN KEY (partyId) REFERENCES Subscriber(partyId),
+    -- Other dependent fields...
+);
+
+
+
+
+@Entity
+public class Subscriber {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String partyId;
+
+    // Other subscriber fields...
+
+    @OneToMany(mappedBy = "subscriber")
+    private List<Dependent> dependents;
+}
+
+@Entity
+public class Dependent {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "partyId")		(This partyIs is in Dependent entity and referencing to table Subscriber)
+    private Subscriber subscriber;
+
+    // Other dependent fields...
+}
+
+-------------------------------------------------------------------------------------------------
+Security
+-------------------------------------------------------------------------------------------------
+/subscriber path is secured. 
+It has role-based access control to make sure only authenticated users can access the subscriber information. 
+http.authorizeRequests().requestMatchers().hasRole("SUBSCRIBER_ROLE")
+
+It has secured ADMIN module---> Only authenticated users with ADMIN_ROLE can access this module. 
+
+Publicly Accessible Modules---> /contact      /notices
+
+
+------------------------------------------------------------------------------------
+Microservices Overview of this Project 
+------------------------------------------------------------------------------------
+Subscriber-Dependents management Microservice
+Admin Operation Microservice
+Pre-enrolment Microservice
+Gateway Microservice
+	Acts as API gateway for all microservices. 
+	Routes incoming requests to appropriate microservice. 
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

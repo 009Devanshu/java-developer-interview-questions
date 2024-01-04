@@ -1,0 +1,25 @@
+HPH Connect 	(03/2022 - Present)
+------------------------------------------------------
+
+I was involved in writing spring services interfaces and their implementations. 
+I wan involved in the use of Hibernate for database related operations.
+Written pojo classes to get and set data from database and using repositories for CRUD operations. 
+Involved in defining variaous endpoints and secure them. 
+Designed controller classes as per the requirement. 
+I was involved in creating test coverage report using Junit and Mockito. 
+I was involved in using postman for the test of APIs functionality. 
+I was involved in monitoring the microservices and also involved in logging. 
+I used maven as build tool. 
+ 
+
+(12/2020-- 03/2021)
+C#---> Salary Slip generate application (Windows Application)	--> Individually (Internal Application)
+       Client Invoice Generate Windows Application      --> Individually (Internal Application)
+       
+       
+
+
+
+I was involved in all design, requirement gathering, estimation, configuration and release management.
+Experience in development, support, maintenance and implementation of medium to large sized components of a project module.
+Experience with Agile engineering practices and various software and web development technologies to rapidly develop creative and efficient solutions that enhance the client customer and employee experience.
