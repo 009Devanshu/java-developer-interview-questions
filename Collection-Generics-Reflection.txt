@@ -1,0 +1,2084 @@
+Compile time errors are easy to be detectable as the application will not be compiled. 
+Runtime errors are more problematic.
+So, prefer compile time errors to Runtime errors.
+
+Why to use generics?
+1)It makes most of the errors and bugs to be detectable at compile time and not at Runtime.
+    Stronger type-check at compile time. If our code violates type safety then the compiler warns us.
+
+2)generics enable types (classes and interfaces) to be parameters when defining other classes, interfaces and methods. We can reuse the same code with different inputs.
+public void draw(Car car)
+    Here, we are passing Car as a parameter.
+public void draw(T t)
+    We are using generic type.
+
+3)We can eliminate type casting
+    
+    List list = new ArrayList<>();
+    String name = (String)list.get(0); We are doing type casting
+
+    List<String> list = new ArrayList<>();
+    String name =  list.get(0);
+
+
+===========================================================================================================
+
+Problem Illustration
+
+public class App {
+
+	public static void add(int num1, int num2) {
+		int result = num1+num2;
+		System.out.println("The result is: "+result);
+	}
+	
+	public static void main(String[] args) {
+		add(10,28);
+	}
+}
+
+Here, we are dealing with only int type parameters.
+
+What if we want to pass double type arguments. Then, we will have to overload the add method--
+
+public class App {
+
+	public static void add(int num1, int num2) {
+		int result = num1+num2;
+		System.out.println("The result is: "+result);
+	}
+	
+	public static void add(double num1, double num2) {
+		double result = num1+num2;
+		System.out.println("The result is: "+result);
+	}
+	public static void main(String[] args) {
+		add(10.3,28.9);
+	}
+}
+
+so, for  different types of arguments, we have to perform overloading. We can handle this situation using generics
+
+***************************************************************
+
+Another Problem Illustration--->
+
+class Store{
+	private Object item;
+
+	public Object getItem() {
+		return item;
+	}
+
+	public void setItem(Object item) {
+		this.item = item;
+	}	
+		
+}
+public class App {
+
+	
+	public static void main(String[] args) {
+		Store theStore = new Store();
+		theStore.setItem(45);
+		Integer result =  (Integer)theStore.getItem();
+		System.out.println(result);
+	}
+}
+
+
+What is the problem with this code?
+1: theStore.setItem(45);
+    We can change value from int (45) to double (45.5), compiler will not give any error. We will get error at run-time only.
+2: We are type-casting.
+
+**************************************************************************************************
+
+
+*************************************************************************************************
+
+class Store <T>{
+	private T item;
+
+	public T getItem() {
+		return item;
+	}
+
+	public void setItem(T item) {
+		this.item = item;
+	}	
+		
+}
+public class App {
+
+	
+	public static void main(String[] args) {
+		Store<String> theStore = new Store<>();
+		theStore.setItem("Hello World");
+		String result =  theStore.getItem();
+		System.out.println(result);
+	}
+}
+
+Now, we are using generics. 
+Suppose we want to pass String type.
+    Store<String> theStore = new Store<>();
+    Now, compiler will warn if we pass any other value except String in setItem() method. (Compile-time error)
+We don't need to type cast 
+    String result =  theStore.getItem();
+
+In this programme, if we write Store theStore = new Store(); Store is a raw type. Now, it is not type safe and you will also have to do type-casting.
+In case of collection, 
+List list = new ArrayList();	(Compiler will warn us that you are using raw type)
+list.add(20);					(Hey, we are not doing type-casting? Yes, In case of collection objects, we don't need to type caste despite the fact that we are using raw type of List.)
+
+
+<>  This is diamond operator.
+
+****************************************************************************************************************************
+
+****************************************************************************************************************************
+
+We have seen generics with a single generic type. We can use multiple generic types.
+
+class Hashtable<K,V>{
+	private K key;
+	private V value;
+	public Hashtable(K key, V value) {
+		super();
+		this.key = key;
+		this.value = value;
+	}
+	@Override
+	public String toString() {
+		return "Hashtable [key=" + key + ", value=" + value + "]";
+	}
+	
+	
+}
+public class App {
+
+	
+	public static void main(String[] args) {
+		Hashtable<String,Integer> hashtable = new Hashtable<>("Hello",12);
+		System.out.println(hashtable);
+	}
+}
+
+Here, Hashtable is a custom class. Not the one from Collection framework.
+
+
+
+********************************************************************************************************
+Generic Methods 
+********************************************************************************************************
+We have seen generic types, now we will see generic methods--
+
+public class GenericMethod {
+
+	public <T> void showItem(T item) {
+		System.out.println("The item is: "+item.toString());
+	}
+}
+
+
+
+/**If we write 
+public  void showItem(T item) {
+		System.out.println("The item is: "+item.toString());
+}
+
+It will give compile time error in the parameter. We will have to use wildcard before return type.
+public <T> void showItem(T item) {
+		System.out.println("The item is: "+item.toString());
+}**/
+
+
+In Main application --
+GenericMethod method = new GenericMethod();
+method.showItem(whatever type of value you can pass);
+Ex1- method.showItem(35);
+Output- The item is 35
+Ex2- method.showItem("Hello World");
+Output- The item is Hello World.
+
+
+We can also return Generic type.
+public <T> T showItem(T item){
+	System.out.println("The item is: "+item.toString());
+	return T;
+}
+
+
+
+********************************************************************************************************
+Generic Methods II 
+********************************************************************************************************
+Other Demostrations --
+
+public <T,V> void printItems(T t, V v) {
+		System.out.println(t.toString());
+		System.out.println(v.toString());
+}
+	
+
+
+
+public <T> void showItems(T[] items) {
+	for(T t: items) 
+		System.out.println(t);
+	
+}
+
+In Main method--
+Integer[] items = {10,20,30,40};			(We can not use int[] type array or any primitive type array)
+method.showItems(items);
+
+
+********************************************************************************************************
+Exercise
+********************************************************************************************************
+
+Let's implement a generic method that checks 2 parameters share the same value or not!
+
+For example:
+checkEquality(12, 8) returns false
+checkEquality(10.5, 10.5) returns true
+checkEquality("Joe", "Joe") returns true
+
+
+public class Exercise {
+
+    // implement the checkEquality() method that takes 2 values as input parameters and it returns
+    // a boolean value whether the values are mathcing or not
+    public <T,V> boolean checkEquality(T t, V v){
+        return t.equals(v);
+    }
+    public static void main(String args[]){
+        Exercise ex = new Exercise();
+        boolean result =  ex.checkEquality(100,100);
+        System.out.println(result);
+    }
+}
+
+
+
+********************************************************************************************************
+Section 4: Bounded Type Parameters
+Bounded type parameters
+********************************************************************************************************
+
+Sometimes we want to restrict the types that can be used as type arguments in a parameterized type.
+A method that operates on numbers(integers, floats or doubles) might only want to accept instances of the Number class or its subclasses.
+
+Bounded types allow you to invoke methods defined in the bounds.
+public class App {
+
+	public static <T extends Comparable<T>> T calculateMin(T num1,T num2) {
+		if(num1.compareTo(num2)<0) {						//We are able to invoke method defined in Comparable interface.
+			return num1;
+		}
+		return num2;
+	}
+	public static void main(String[] args) {
+		System.out.println(calculateMin("Hello","Anvesh"));
+		System.out.println(calculateMin('k','a'));
+		System.out.println(calculateMin(100,90));
+	}
+}
+
+
+-------------------------------------------------------------
+Another Demostration:
+class Person implements Comparable<Person>{
+	
+	private int age;
+	private String name;
+	
+	public Person(String name,int age) {
+		this.age = age;
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public int compareTo(Person otherPerson) {
+		return Integer.compare(age, otherPerson.getAge());
+	}
+	@Override
+	public String toString() {
+		return "Person [age=" + age + ", name=" + name + "]";
+	}
+	
+}
+
+public class App {
+
+	public static <T extends Comparable<T>> T calculateMin(T num1,T num2) {
+		if(num1.compareTo(num2)<0) {
+			return num1;
+		}
+		return num2;
+	}
+	public static void main(String[] args) {
+		System.out.println(calculateMin(new Person("Kevin",48),new Person("Henry",78)));
+	}
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+***************************************
+Section 5: Type Inference 
+***************************************
+
+What is Type Inference? 
+Answer: It is the ability of compiler to determine the exact type that works with all the arguments.
+
+		public class App {
+			public static <T> void getData(T t1, T t2) {
+				System.out.println(t1);;
+			}
+			public static void main(String[] args) {
+				getData("Hello",new ArrayList<>());
+			}
+		}
+
+		
+		The above and below examples work fine.
+		Here, String and ArrayList both implements Serializable. So, in 'public static <T> void get....', T is of Serializable type.
+
+		public class App {
+			public static <T> T getData(T t1, T t2) {
+				return t1;
+			}
+			public static void main(String[] args) {
+				Serializable s = getData("Hello",new ArrayList<>());
+			}
+	
+		}
+
+
+
+
+
+Because of the type inference, we can use class instantiation like this--
+List<String> list = new ArrayList<>();
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class Bucket<T>{
+	private T item;
+	
+	public T getItem() {
+		return item;
+	}
+	public void setItem(T item) {
+		this.item = item;
+	}
+}
+public class App {
+	
+	public static <T> void addStore(T t, List<Bucket<T>> list) {
+		Bucket<T> bucket = new Bucket<>();
+		bucket.setItem(t);
+		list.add(bucket);
+		System.out.println(t.toString()+" has been added to the bucket");
+	}
+	
+	public static void main(String[] args) {
+		List<Bucket<String>> list = new ArrayList<>();
+		App.addStore("Adam", list); //Java Compiler is going to determine the type of T (which is String here)
+								//first argument is of type String and second argument is of type List of bucket of String
+								//compiler will determine the type of T (in public static <T> void...) to be String.
+		//type witness
+		App.<String>addStore("Dani Daniels",list);
+	}
+	
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Another example of Type Inference
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+public class App {
+	
+	public static <T> List<T> show(List<T> list, T t1, T t2){
+		list.add(t1);
+		list.add(t2);
+		return list;
+	}
+	
+	public static void main(String[] args) {
+		List<String> list = show(new ArrayList<>(),"Hello","Sunny");
+		System.out.println(list);
+	}
+	
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+============================================================================================================================================
+
+************************************************
+Section 6: Wildcards 
+************************************************
+
+Integer is a subtype of Number.
+List<Integer> is not a subtype of List<Number> despite the fact that Integer is a Number.
+This is why we need Wildcards.
+
+
+public void print(Collection<Object> c)
+{
+	for(Object o:c)
+		System.out.println(o);
+}
+It will not work fine if we pass List<Integer> or List<String>.
+This is why we need to consider Wildcards -  the supertype of all kinds of collections are wildcards.
+
+
+
+public void print(Collection<?> c)
+{
+	for(Object o:c)
+		System.out.println(o);
+}
+A List<Integer> is a subtype of Collection<?>
+We can print anything we want (Integers, Doubles or String) but we can not insert into this Collection because we don't know the type.
+
+
+
+
+================================================
+Unbounded Wildcards example
+================================================
+
+public void print(Collection<?> c)
+{
+	for(Object o:c)
+		System.out.println(o);
+}
+We are using Unbounded wildcard. So, java does not know It is Integer or String or any specific type. That's why we are using Object in for(Object o:c).
+To tackle this situation, we can use bounded type parameter--
+public class App {
+	
+	public static <T extends Number> void show(List<T> c) {
+		for(Number o:c) {
+			System.out.println(o);
+		}
+	}
+	public static void main(String[] args) {
+		List<Integer> list = Arrays.asList(100,200,300);
+		show(list);
+	}
+	
+}
+
+
+Another Demostration:
+--------------------------
+public interface Shape
+{
+	public void draw();
+}
+
+public class Rectangle implements Shape
+{
+	public void draw()
+	{
+		System.out.println("Drawing Rectangle");
+	}
+}
+
+public class Circle implements Shape 
+{
+	public void draw()
+	{
+		System.out.println("Drawing Circle");
+	}
+}
+
+
+public class App
+{
+	public static void drawAll(List<?> list)
+	{
+		for(Object o:list)
+			//o.draw(); This will give error. Object does not know about draw method.
+			//if we do for(Shape s:list). It is also wrong because of Unbounded wildcard.
+	}
+	//So we can use bounded type parameter 
+	public static <T extends Shape> void drawAll(List<T> list)
+	{
+		for(Shape s:list)
+			s.draw();
+	}
+	public static void main(String[] args)
+	{
+		List<Rectangle> rectangles  = new ArrayList<>();
+		rectangles.add(new Rectangle());
+		drawAll(rectangles);
+	}
+}
+
+
+
+======================================
+Upper Bounded Wildcards
+======================================
+printAll(List<? extends T>)
+- This method can accept a list of any subclass of T.
+
+What if we want to add an item when using an upper bounded wildcard?
+	addItem(List<? extends Number>)
+We can not add an Integer to the List because the type can not be guaranteed - it may be List<Double>
+We can not add an Double to the List because the type can not be guaranteed - it may be List<Integer>
+The only thing that you can do is to read the item.
+
+
+Question: What is the difference between Bounded type parameter and upper bounded wildcard?
+Answer:  
+	Using Bounded type parameter, we can read as well as add elements but to add elements you will have to add wisely
+	public static <T extends Number> void drawAll(List<T> c, T item) {
+		c.add(item);
+		for(Number o:c)
+			System.out.println(o.byteValue());
+	}
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<>();
+		drawAll(list,100);
+	}
+	//Here, second argument will help in making clear 100 percent the type of the argument. 
+	But, the below method--
+	public static <T extends Number> void drawAll2(List<T> c)
+	{
+		c.add(100);// This is wrong.
+		for(Number o:c)
+			System.out.println(o.byteValue());
+	}
+
+
+	Using upper bounded wildcard, we can just read the elements.
+	public static void drawAll(List<? extends Number> c) {
+		for(Number n:c)
+			System.out.println(n);
+	}
+	public static void main(String[] args) {
+		
+		List<Integer> list = Arrays.asList(10,20,30);
+		drawAll(list);
+	}
+
+
+
+	But, suppose we want to add element, hardly what would you do. The below one??? :) Idiot ha ha ha ha 
+	public static <T> void drawAll(List<? extends Number> c,T item) {  
+		Now, how will you add. Even being orthodox can not add any value. But, suppose--
+		c.add(item);  // How did you decide the type of List. Mr Orthodox,upper bounded wildcard and bounded type argument work in their own way. Bounded type argument will not decide type of List here.
+		..
+		..		
+	}
+
+
+======================================
+Upper Bounded Wildcards Example
+======================================
+
+
+We can create ArrayLists like this--
+List<? extends Number> list1 = new ArrayList<Integer>();
+List<? extends Number> list2 = new ArrayList<Double>();
+List<? extends Number> list3 = new ArrayList<Float>():
+
+
+
+==================================
+Lower Bounded Wildcards
+==================================
+printAll(List<? super T>)
+This method can accept a list of any superclass of T.
+
+addItem(List<? super Integer>)
+We can add an Integer to the list without any problem.
+We can add Numbers or even Objects to the list because Numbers and Objects are superclasses of Integers.
+
+You can not read items from a List<? super T> because you can not guarantee what list it is really pointing to - we can read Objects exclusively.
+We can insert subtypes of T into a List<? super T>
+
+
+The below example is just going to work fine--
+----------------------------------------------------
+public static void showAll(List<? super Integer> c) {
+		for(Object n:c) {
+			System.out.println(n);
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+		List<? super Integer> l1 = new ArrayList<Integer>();
+		List<? super Integer> l2 = new ArrayList<Number>();
+		List<? super Integer> l3 = new ArrayList<Object>();
+	}
+	
+But, If I Use Number or any other Class in for loop, it will give error.
+
+
+Now, Inserting into lower bounded wildcard--
+List<? super Number> list = new ArrayList<>();
+list.add(100);
+list.add(100L);
+list.add(100.09);
+//list.add("Hello World"); Not Ok
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Section 9: Collection Framework
+-------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------
+How to measure the running time of algorithms?
+--------------------------------------------------
+
+Running Time of Algorithms 
+--------------------------
+It is quite hard to define the running time of a given algorithm- because it depends upon underlying hardware. So, may be measuring the running time is not the best option possible.
+better approach: measure the number of steps instead- how many steps a given algorithm requires with respect to the input. For example: We want to sort an array with N items. How many steps does the given sorting algorithm requires?
+
+O(1)- Constant Running time complexity
+	These algorithms are the fastest approaches: the running time is independent of the N input (number of items)
+	Example: We want to swap two items with known indexes in a given one-dimensional array.
+			 We want to access a particular item of known index from a given array.
+
+O(N)- linear running time complexity
+	These algorithms' running time scale linearly with the N input so the running time increases linearly with the size of the input.
+	if we have 2x the size of the input then the running time will be 2x as well.
+	Example: If we want to find an unknown item in an unsorted one-dimensional array. (linear search)
+			 int[] a = new int[] {5,-4,8,2,1,12}; Suppose we want to find 1.
+			 Linear search will search from the left-hand side one-by-one.
+
+O(logN)- logarithmic running time complexity
+	These algorithms' running time scale logarithmically with the N input so the running time increases logarithmically with the size of the input.
+	Example: If we want to find an unknown item in a sorted one-dimensional array (binary search)
+
+Running Time Complexity--
+O(1)
+O(logN)
+O(N)
+O(NlogN)
+.
+.
+
+O(logN) is close very close to O(1).
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------
+Section 10: Lists 
+--------------------------------------------
+
+-------------------------------
+The List Interface 
+-------------------------------
+-The list interface is an ordered collection that allows us to store and access items in a sequential manner.
+-It extends the Collection interface, Collection extends Iterable interface, so List extends Iterable interface.
+-List can store duplicate elements (while sets can not)
+-It gives the user full visibility and control over the ordering of its elements.
+
+
+List<String> names  = new ArrayList<>();
+names.add("Adam");
+names.add("Kevin");
+names.add("Emily");
+
+Iterator<String> iter = names.iterator();
+while(iter.hasNext())
+	System.out.println(iter.next());
+
+Or we can use forEach loop to iterate names--
+for(String name:names)
+	System.out.println(name);
+
+
+
+----------------------------------------------------------
+What are Arrays?
+----------------------------------------------------------
+
+What is the aim of a data structure?
+The aim is to make operations as fast as possible such as inserting new items or removing given items from the data structure.
+Arrays are data structures where all the items are identified by an index - an integer starting with 0.
+The items of arrays are located right next to each other in the main memory (RAM) - they can be accessed by the index.
+
+Accessing items based on the indexes (random indexing) is the main advantage of array data structures.
+Random Access: Items are located right next to each other so we can get them with the help of the index - in O(1) running time.
+
+The main problem with Arrays is that we have to know the number of items we want to store in advance (static arrays).
+Static Arrays--size of arrays does not change.
+Dynamic Arrays--size of arrays may change dynamically. (Example- ArrayList)
+
+-More complex complex data structures rely heavily on arrays because of random indexing - O(1) access of items with known indexes. 
+Ex- Stacks, Queues and HashTables 
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+Array Operations Visualization
+---------------------------------------------------------------------------------------------------
+
+Array Data Structure 
+------------------------------------
+ADDING ITEMS :-
+----------------
+We can insert new items to the end of the data structure until the data structure is not full - O(1) running time.
+What if the data structure becomes full?
+- have to allocate a larger chunk of memory in the RAM (usually 2x the size of the actual array)
+- have to copy the existing items one by one to the new array.
+- because of these operations: the resize operation takes O(N) linear running time complexity - this is the bottleneck.
+
+
+MEMORY AND RUNNING TIME TRADE-OFF:-
+------------------------------------
+Start with a small sized array- We don't waste memory but we have to resize the array often with O(N) running time.
+Allocate the huge array at the beginning- We do waste memory because of the large size but at least we do not have to bother with the resize operation.
+
+
+ADDING ITEMS :-
+----------------
+We can insert new items to arbitrary positions associated with a given index (we may have to shift items)
+It is an O(N) linear running time complexity because the items must be shifted. ( in worst-case all the items)
+
+
+Removing Items:-
+------------------
+We can remove the last item quite fast - in O(1) constant running time complexity.
+Removing an arbitrary item of the array -- We may shift multiple items - O(N) running time complexity.
+	First we have to find the item in O(N) in running time then remove the item in O(1) and finally have to shift the other items in O(N)
+	O(N) + O(1) + O(N) = O(N)
+
+OPERATION 				                       RUNNING TIME
+------------------------------------------------------------------
+search based on index	<--------------------->O(1)			   
+
+search for arbitrary item (no index) <-------->O(N)
+
+insert item to the end of array <------------->O(1)
+
+insert item to arbitrary position <----------->O(N)
+
+removing last item <-------------------------->O(1)
+
+removing arbitrary item <--------------------->O(N)
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------
+ArrayList Example
+---------------------------------------------------------------------------------------------------
+
+ArrayList() constructs an empty list with an initial capacity of ten.
+
+
+
+If we know we are going to store 5 million elements in ArrayList, then it is better to specify capacity because java will have to increase the size multiple times and it will be very expensive. 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// resizing the array takes O(N)
+List<String> names = new ArrayList<>();
+
+names.add("Kevin");
+names.add("Adam");
+names.add("Ana");
+
+// random accessing in O(1)   [This is the main advantage as far as the ArrayLists are concerned]
+System.out.println(names.get(0));
+
+// inserting item into a given index - O(N)
+names.add(0,"Daniel");
+0 <-----> Kevin   												0 <---------> Daniel 
+1 <-----> Adam --------------After Inserting---------------> 	1 <---------> Kevin
+2 <-----> Ana													2 <---------> Adam 
+																3 <---------> Ana 
+// removing item from a given index - O(N)
+0 <---------> Daniel			                                0 <---------> Kevin
+1 <---------> Kevin ---------------- After Removing--------->   1 <---------> Adam 
+2 <---------> Adam                                              2 <---------> Ana
+3 <---------> Ana
+
+//ARRAYLIST (ARRAYS) ARE FAST IF WE MANIPULATE THE LAST ITEM.
+
+//because of Iterable interface 
+for(String name:names)
+	System.out.println(name);
+
+
+Object[] o = names.toArray();
+for(Object name:o)
+	System.out.println(name);
+
+
+//contains will check whether the item is present in the array 
+System.out.println(names.contains("Katy"));
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+----------------------------------------------
+Exercise: 
+----------------------------------------------
+your exercise is to reverse a List<Integer> in-place (without extra memory) - by the way it is included in Java's Collections.
+For example:
+Input is [1, 2, 3, 4] --> result should be [4, 3, 2, 1] .
+There are multiple solutions (with quadratic running time as well as with linear running time complexity).
+
+
+What is the time complexity of below method solution given by me---
+public void reverse(List<Integer> list) {
+		// here is your implementation
+		List<Integer> list2 = new ArrayList<>();
+		for(int i=list.size()-1;i>=0;i--)
+		{
+		    list2.add(list.get(i));
+		}
+	} 
+
+O(N)--- This is because you iterate through the entire list once, copying each element from the original list to the new list in reverse order.
+The for loop runs from list.size() - 1 to 0, which requires 'n' iterations, where 'n' is the size of the input list.
+Inside the loop, you perform a constant-time operation (adding an element to list2) for each iteration.
+Since the loop runs 'n' times and each iteration performs a constant-time operation, the overall time complexity is O(n).
+
+
+The below is better approach :-
+-----------------------------------
+public static void reverse(List<Integer> list) {
+		for(int i=0, mid=list.size()/2, j=list.size()-1;i<mid;i++,j--) {
+			int num1 = list.get(i);
+			int num2 = list.get(j);
+			list.set(i, num2);
+			list.set(j, num1);
+		}
+	} 
+	
+    public static void main(String[] args) {
+    	
+    	List<Integer> list = new ArrayList<>();
+    	list.add(1);
+    	list.add(2);
+    	list.add(3);
+    	list.add(4);
+    	list.add(5);
+    	list.add(6);
+    	list.add(7);
+    	reverse(list);
+    	System.out.println(list);
+    }
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------
+What are Linked Lists?
+-------------------------------------------------------
+
+- It is another data structure - so the aim is to be able to store items efficiently (insertion and removal operations).
+- Arrays have a huge disadvantage: there may be "holes" in the data structure and we have to shift a lot of items.
+- This problem can be eliminated by Linked List.
+
+- We have access to the first node of the linked list exclusively (head node) and other items can be accessed starting with this node.
+- Last node is pointing to a null.
+
+- Every node stores the data itself and a reference to the next node in the linked list data structure.
+- This is why linked lists need more memory than arrays.
+- It has an advantage - there can not be "holes" in the data structure so there is no need of shifting items.
+
+- Items are stored next to each to each other in the memory - so there is no random indexing.
+- With the help of Linked List data structure, we can implement more complex data strutures and abstract data types such as stacks and queues.
+
+
+- Finding arbitrary item in a linked List is has O(N) linear running time complexity.
+
+(Go for PDFS for more Visualization)
+
+
+
+-------------------------------------------------------
+Linked List Operations Visualization
+-------------------------------------------------------
+
+Adding Items:-
+---------------
+We can insert new item to the beginning of the data structure in O(1) constant running time.
+function insertBeginning(List list, Node newNode)
+	newNode.next :=list.firstNode
+	list.firstNode :=newNode
+
+We can insert new items to the end of the data structure in O(1) linear running time complexity (Since we can access to the first node exclusively and we will have to pass every node of the linked list data structure)
+
+
+Removing Items:-
+-----------------
+Removing the first item of the linked list is easy because we just have to update the reference - in O(1) constant running time complexity.
+Removing the last item of the linked list is not that easy because first we have to traverse the list to get there - in O(N) linear running time complexity.
+
+conclusion:-
+------------
+Manipulation the first item (insertion or removal):
+	O(1) running time - this is why we like linked lists.
+
+Manipulation arbitrary item or last item:
+	O(N) running time - if we have to do several to these operations then linked list is not the best option possible.
+
+
+OPERATION 									              RUNNING TIME 
+-----------------------------------------------------------------------
+
+find first item (head node) <--------------------------> O(1)
+
+search for arbitrary item <----------------------------> O(N)
+
+insert item to the beginning <-------------------------> O(1)
+
+insert item to arbitrary position <--------------------> O(N)
+
+removing first item <--------------------------------- > O(1)
+
+removing arbitrary item <------------------------------> O(N)
+
+
+
+-----------------------------------------------------------------------------------------------------------------
+Linked List Example
+-----------------------------------------------------------------------------------------------------------------
+
+In Java, the underlying data structure of LinkedList is doubly-LinkedList, that means each node has reference to its next and previous node. So, manipulating first node and the last node in this LinkedList is quite fast in O(1) running time complexity.
+
+
+	List<Integer> list = new LinkedList<>();
+    	
+    	//O(1)
+//    	list.addLast(10);
+//    	list.addLast(20);
+//    	list.addLast(30);
+    	
+		//O(1)
+    	list.addFirst(10);
+    	list.addFirst(20);
+    	list.addFirst(30);
+    	
+		//O(1)
+    	list.removeLast();
+    	list.removeFirst();
+
+
+
+---------------------------------------------------------------------------------------
+Vector
+---------------------------------------------------------------------------------------
+
+Vector is the subtype of List
+
+Question: What is the crucial difference between ArrayList and Vector?
+Answer: As fast as ArrayList is concerned, Java automatically doubles the size of array if we need to insert extra element. But, as far as Vector is concerned, we can use capacity increment and java will increase the size of Vector according to the capacity increment. Vector is synchronized in nature while ArrayList is not synchronized.
+
+
+
+--------------------------------------------------------------------------------------
+Stacks
+--------------------------------------------------------------------------------------
+- It is a abstract data type. (Because they define behaviour without internal implementation)
+- It has LIFO structure.
+- The basic operations are pop(), push() and peek()
+- Most of the programming languages are stack-oriented that's why Stacks are so crucial. Because modern programming languages store the function calls and local variables associated with the function call in a stack abstract data type.
+
+
+- stack memory is a special memory in the RAM
+- this is a special data type (stack) that stores local variables and method calls.
+
+
+- Stacks extends Vector class - which means Stacks are inherently synchronized. However, synchronization is not always needed - in such cases it is better to use ArrayDeque.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------
+Section 11: Queues
+----------------------------------------
+
+
+- An abstract data type - and it can be implemented either with arrays or with linked lists.
+- FIFO structure. 
+- Basic operations are enqueue, dequeue and peek.
+- Queues are useful when a resource is shared with several consumers (for example threads)
+- Threads are stored in queues.
+- Queues are important in CPU scheduling.
+
+
+----------------------------------------
+Queue Example
+----------------------------------------
+See Collection Intro slide - LinkedList implements Dequeu, Dequeu implements Queue.
+
+
+		/*Deque<Integer> queue = new ArrayDeque<>();
+		//FIFO
+    	queue.add(1);
+    	queue.add(10);
+    	queue.add(100);
+    	queue.add(1000);
+    	
+    	while(!queue.isEmpty())
+    		System.out.println(queue.poll());*/
+    	
+    	Deque<Integer> stack = new ArrayDeque<>();
+		//LIFO
+    	stack.push(1);
+    	stack.push(10);
+    	stack.push(100);
+    	stack.push(1000);
+    	
+    	while(!stack.isEmpty())
+    		System.out.println(stack.pop());
+
+
+----------------------------------------
+Priority Queue
+----------------------------------------
+We assign a priority value to every single item.
+	- element with higher priority is served before an element with lower priority.
+	- the elements of priority queue are ordered according to their natural ordering 
+			defined by the Comparable interface. 
+	add() - add element to the queue
+	peek() - 
+	poll()
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class Person implements Comparable<Person>{
+
+	private String name;
+	private int age;
+	
+	public Person() {
+		
+	}
+	
+	
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+
+	@Override
+	public int compareTo(Person o) {
+
+		//return Integer.compare(age, o.getAge());
+		return this.name.compareTo(o.getName());
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + age + "]";
+	}
+	
+}
+public class App {
+
+    public static void main(String[] args) {
+    	
+    	Queue<Person> queue = new PriorityQueue<>();
+    	queue.add(new Person("Adam",22));
+    	queue.add(new Person("Kevin",29));
+    	queue.add(new Person("Ann",31));
+    	queue.add(new Person("Daniel",26));
+    	
+    	
+    	while(!queue.isEmpty())
+    		System.out.println(queue.poll());
+    }
+}
+
+Here, we are deciding priority through compareTo method.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+----------------------------------------
+ArrayDeque Example
+----------------------------------------
+
+Deque - Double ended Queue
+		Can manipulate both sides of the Queue in O(1) constant running time complexity. That's why implementing Queues and Stacks are extremely efficient with the help of deques.
+	
+ArrayDeque : Resizable-array implementation of the Deque interface. So, the most efficient than LinkedList.
+			 ArrayDeque has no capacity restrictions, they grow as necessary to support usage.
+
+
+
+
+ public static void main(String[] args) {
+    	
+		/*
+		 * Deque<Integer> queue = new ArrayDeque<>(); queue.add(1); queue.add(10);
+		 * queue.add(100); queue.add(1000); //We can use offer method 
+		 * 
+		 * while(!queue.isEmpty()) System.out.println(queue.poll());
+		 */
+		 Output-- 1, 10,100,1000
+    	
+    	Deque<Integer> stack = new ArrayDeque<>();
+    	stack.push(1);
+    	stack.push(10);
+    	stack.push(100);
+    	stack.push(1000);
+    	
+    	while(!stack.isEmpty())
+    		System.out.println(stack.poll());
+		Output-- 1000, 100, 10, 1
+    }
+
+
+
+---------------------------------------------------
+ArrayDeque and Stack performance comparison
+---------------------------------------------------
+
+Stack is synchronized (because it extends the Vector class) this is why it is going to be slower than the ArrayDeque solution. So it is advisable to use ArrayDeque if we are after a LIFO structure. 
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------
+Section 12: Maps
+-------------------------------------------------
+
+---------------------------------------
+What are associative arrays?
+---------------------------------------
+- Associative arrays (maps or dictionaries) are abstract data types. For example, we can implement associative arrays with the help of an underlying one-dimensional array or with the help of balanced binary search tree.
+- Composed of a collection of key-value pair.
+- Most of the times we implement associative arrays with hashtables but binary search tree can be used as well.
+- The aim is to reach O(1) time complexity for most of the operations.
+
+
+- Finding an arbitrary item in an array takes O(N) linear running time (But it has O(1 random access)). We can do better with binary search trees with O(logN) logarithmic running time (AVL and red-black trees can guarantee O(logN) running times). We can combine random access with hash-functions to end-up with O(1) running  times (Associative array).
+
+
+- There are several operations we want to implement - and we want these operations to have O(1) running time.
+- Adding (key,value) pairs to the collection. 
+- Removing (key,value) pairs from the collection. 
+- Lookup a given value associated with a given key. 
+- the key and value pairs are unordered - this is why associative arrays do not support sorting as an operation. 
+
+
+
+---------------------------------------
+HashTables Introduction
+---------------------------------------
+The motivation is that we want to store (key,value) pairs efficiently - so that insert and remove operations take O(1) running time. 
+Example:- Storing Emails and Users as key-value pairs in the sense that key should be unique in nature. That means a single key (Email) should not have more that one value (User).
+
+
+How to achieve O(1) running times for insertion and removal operations?
+we should transform the key into an array index - to achieve random access. 
+This is why keys must be unique to avoid using the same indexes. 
+h(X) hash-function transforms the key into an index in the range [0,m-1].
+h(x) hash-function maps keys to array indexes in the array to be able to use random indexing and achieve O(1) running time. 
+It should handle any types -  strings, floats, Integers or even custom objects as well. 
+If we have integer keys, we just have to use modulo (%) operator to transform the number into the range [0,m-1]
+We can use ASCII values of the letters when dealing with Strings. 
+
+Example:- 
+
+	INSERT("ADAM",39);
+	A(65) +	D(68) +	A(65) +	M(77) = 275
+	275%8--> 3 (Suppose size of the bucket is 8)
+	("ADAM",39) will be inserted at index 3.
+
+	INSERT("NAAC",21)
+	N(78) + A(65) + A(65) + C(67) = 275
+	275%8--> 3 (In the same bucket)
+
+	Here, we will get collision.
+
+
+---------------------------------------
+HashTables Introduction: Collisions
+---------------------------------------
+Collisions occur when the h(x) hash-function maps two keys to the same array slot (bucket).
+
+There are several approaches to deal with collision:-
+1) Chaining 
+2) Open Addressing
+
+1) Chaining:- We store the items in the same bucket (with same indexes) in a linked list data structure. 
+In worst-case scenario, the h(x) function puts all the items in the same bucket.
+We end-up with a linked list with O(N) linear running time for most of the operations. 
+
+2) Open Addressing:-If we come to the conclusion that there is a collision then we generate a new index for the item (try to find another bucket)
+
+	Linear probing:-if collision happened at array index k then we try index k+1, k+2, k+3 until we find any empty bucket. 
+	--> Not always the best option possible because there will be clusters in the underlying arrays. 
+	--> but it has better cache performance than other approaches.
+
+	Quadratic probing:- if collision happened at array index k then we try successive values of an arbitrary quadratic polynomial
+		(array slots 1,4,9,16... steps away from the collision)
+	--> There will be no cluster (unlike linear probing)
+	--> but no cache advantage (items are far away in memory)
+
+	Rehasing:- if collision happened at array index k then we use the h(x) hash-function again to generate a new index. 
+
+
+								Average-Case 					Worst-Case
+----------------------------------------------------------------------------------------								
+Memory Complexity				O(N)							O(N)
+
+Search      					O(1)							O(N)
+
+Insertion 						O(1)							O(N)
+
+Deletion 						O(1)							O(N)
+
+
+
+
+------------------------------------------------------------
+Hashtable Introduction: Load Factor and dynamic resizing
+------------------------------------------------------------
+
+- the p(x) probability of collision  is not constant. 
+- The more items are there in the HashTable, the higher the p(x) probability of collision. 
+- This is why we have to define new parameter of the HashTable - so called load-factor. 
+
+Defining Load Factor:- n/m 
+Where n---> number of actual items in the array data structure. 
+	  m---> m is the size of the array. 
+Small Load Factor (around 0)
+	- The hashtable is nearly empty which means low p(x) probability of Collision. 
+	- but lot of memory is wasted. 
+Hight Load Factor (around 1) 
+	- The hashtable is nearly full which means high p(x) probability of Collision. 
+	- no memory is waster but the running time may be reduced to O(N) linear running time. 
+So, there is a trade off between memory and running time. 
+
+Load Factor and Dynamic Resizing:-
+Performance relies heavily on the load factor. Sometimes it is better to use memory to achieve faster running times. 
+	-> When the load factor is >0.75 then java resizes the hashtable automatically to avoid too many collisions. 
+	-> Python does the same when load factor >0.66
+
+The problem with dynamic resizing:- 
+We have to consider all the items in the old hashtable and insert them into the new one with the h(x) hash-function.
+It takes O(N) linear running time - this fact may make dynamic sized hashtables inappropriate for real time applications. 
+
+
+
+------------------------------------------------------------
+HashMap Example
+------------------------------------------------------------
+Hash Table based implementation of Map interface. It is roughly equivalent to HashTable except it is unsynchronized and accepts nulls (both as key and value). 
+HashMap is non-synchronized that means we can not use it in multithreaded environment.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Map<Integer,String> map = new HashMap<>();
+    	// Insert item with O(1) if there is no collision
+    	map.put(1, "Adam");
+    	map.put(2, "Kevin");
+    	map.put(3, "Anna");
+    	map.put(4, "Lucy");
+
+		//Remove item in O(1)
+    	map.remove(4);
+    	
+    	for(Integer key:map.keySet())
+    		System.out.println(map.get(key));
+
+		//Another way to key and value 
+		for(Map.Entry<Integer,String> entry:map.entrySet())
+    		System.out.println(entry.getKey()+"_"+entry.getValue());
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+HashMap does not store items in sorted order. This is one of the disadvantages of HashMap.
+
+
+
+-------------------------------------------------------------
+HashMap example - hashcode() and equals()
+-------------------------------------------------------------
+
+
+public class Person {
+	
+	private String name;
+	private int age;
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		//hashCode()=hash-function
+		//it calculates the Array index based on the key (key==Person objects)
+		//avoid clustering with prime numbers
+		return Objects.hash(age, name);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		// because in a hashmap, it may happen (collisions)
+		// that we have to find the item (Person) in a linked list
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		return age == other.age && Objects.equals(name, other.name);
+	}
+
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + age + "]";
+	}
+	
+	
+}
+
+
+
+Java will use this hashCode method as far as Person as key is concerned.
+	Map<Person,String> map = new HashMap<>();
+Java will not use this hashCode if we don't use Person as Key. 
+	Map<String,Person> map = new HashMap<>(); 
+
+
+
+
+-------------------------------------------------------------
+LinkedHashMap
+-------------------------------------------------------------
+
+Java is not going to maintain any order as far as HashMap is concerned.
+
+Map<String,Integer> map = new HashMap<>();
+		map.put("aaa", 1);
+		map.put("bbb", 2);
+		map.put("ccc", 3);
+		map.put("ddd", 4);
+		map.put("eee", 5);
+		map.put("fff", 6);
+		map.put("ggg", 7);
+		
+		for(String key:map.keySet())
+			System.out.println(key+"-"+map.get(key));
+
+Output:-
+aaa-1
+ccc-3
+bbb-2
+eee-5
+ddd-4
+ggg-7
+fff-6
+(Here, we are getting unordered output. It might be happened that output is ordered but that is not guaranteed)
+
+
+To overcome this problem, we use LinkedHashMap.
+//There is doubly Linked List connecting the inserted items
+//LinkedHashMap needs more memory
+Map<String,Integer> map = new LinkedHashMap<>();
+
+
+-------------------------------------------------------------
+Tree Data Structures and Red Black Trees 
+-------------------------------------------------------------
+
+In order to understand TreeSet and TreeMap, we have to understand Red-Black Tree and in order to understand Red-Black Tree, we have to understand binary search tree.
+
+Binary Search Treee 
+----------------------
+- Arrays can manipulate the last item in O(1) constant running time complexity that is quite fast. 
+- Linked List can manipulate the first item of the data structure quite fast. 
+- Searching for an arbitrary item takes O(N) linear running time for both data structures. 
+  (WHAT IF THE ARRAY DATA STRUCTURE IS SORTED?)
+- We can search the arbitrary item in O(logN) logarithmic time complexity. 
+- This is concept behind binary search tree. 
+
+
+- Every node in the tree can have at most 2 children (left child and right child)
+- left child is smaller than parent node. 
+- right child is greater thatn parent node. 
+- We can access the root node exclusively and all other nodes can be accessed via the root node. 
+(We can say that left subtree contains smaller items and right subtree contains larger items)
+
+
+
+How to construct a binary search tree 
+-------------------------------------------
+(Lecture 54)
+
+
+Drawback of Binary Search Tree 
+------------------------------------------
+(Lecture 54)
+
+But, Red-Black tree or AVL tree (Which are balanced binary search tree) remove this drawback and provide guaranteed O(logN) running time complexity using left-rotation or right rotation.
+
+								Average-Case 					Worst-Case
+----------------------------------------------------------------------------------------								
+Memory Complexity				O(N)							O(N)
+
+Search      					O(N)							O(N)
+
+Insertion 						O(N)							O(N)
+
+Deletion 						O(N)							O(N)
+
+
+In Red-Black Tree, every node can be either Red or Black and every single path from the root node to a null pointer contains same number of black nodes (first root node(But, I am not sure it is true) and null pointers are black).  
+
+
+---------------------------------------------------------
+TreeMap Example
+---------------------------------------------------------
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+TreeMap<Integer,String> map = new TreeMap<>();
+		map.put(10, "ten");
+		map.put(3, "three");
+		map.put(5, "five");
+		map.put(1, "one");
+		map.put(8, "eight");
+		
+		System.out.println("Smallest Key "+map.firstKey()); 
+
+		for(Map.Entry<Integer, String> entry:map.entrySet())
+			System.out.println(entry.getKey()+" - "+entry.getValue());
+
+Output: 
+1 - one
+3 - three
+5 - five
+8 - eight
+10 - ten
+(It is sorted in increasing order)
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+What If we want to sort in decreasing order of keys:-
+Map<Integer,String> map = new TreeMap<>(Comparator.reverseOrder());
+
+
+HashTables has O(1) running time complexity which is faster than O(logN) but it is not guaranteed. But, log(N) running time complexity in TreeMap is guaranteed.
+
+
+----------------------------------------------------------
+TreeMap and HashMap Performance comparision
+----------------------------------------------------------
+
+As we know Java uses chaining in case of collision in HashMap which may give linear running time complexity in worst case scenario. So, Java changed its startegy to handle collisions  and instead of chaining Java transforms the items into Red-Black tree which means HashMaps and LinkedHashMaps have O(logN) running in worst-case scenario. In previous versions, we ended up with O(N) running time complexity in worst-case scenario. But, with the update we end up with O(logN) running time complexity (balanced binary search tree)
+
+
+
+HashMap and 																TreeMap 
+LinkedHashMap 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Use arrays and hash-functions under the hood 								uses balanced binary search tree and maintains order (Increasing or decreasing order)
+
+We can achieve O(1) runnint time 											O(logN) is guaranteed.
+
+Worst Case running time is O(logN)											can not use null as keys + no parameter to tune (loadFactor)
+
+Can store null keys as well 												
+																			Need less memory
+
+
+-------------------------------------------------------------
+Section 13: Sets 
+-------------------------------------------------------------
+Sets are abstract data types that can store certain values without any particular order and no repeated values - no duplicates (These are also crucial differences from List)
+
+Go for lecture or slide for venn diagram (I don't know why. Lol!!)
+
+
+--------------------------------------------
+HashSet Example 
+--------------------------------------------
+It is somewhat similar to HashTable. So, under the hood, HashSet uses one-dimensional array and hash-function. It uses scalar values instead of key-value pair.
+
+
+public static void main(String[] args) {
+		
+		// initial capacity=16
+		// hashCode() function (hash-function) transform the input into array index
+		// O(1) + memory heavy 
+		// there may be collisions - O(logN)
+		Set<String> set  = new HashSet<>();
+		set.add("Anna");
+		set.add("Daniel");
+		set.add("Andre");
+		set.add("Rober");
+		
+		for(String s:set)
+			System.out.println(s);
+	}
+
+hash-function will calculate index with the help of values that we are adding. 
+
+
+------------------------------------------------------
+LinkedHashSet Example 
+------------------------------------------------------
+It maintains the insertion order. 
+Needs more memory than HashSets because under the hood it uses  Doubly LinkedList.
+
+-------------------------------------------------------
+TreeSet Example
+-------------------------------------------------------
+
+public static void main(String[] args) {
+		
+		//O(logN)
+		//Memory Friendly
+		SortedSet<Integer> set = new TreeSet<>();
+		set.add(12);
+		set.add(1);
+		set.add(9);
+		set.add(5);
+		set.add(120);
+		set.add(87);
+		set.add(55);
+		
+		Set<Integer> subSet =  set.subSet(1, 120);
+		//other methods are -- tailSet(), headSet(), first(), last()
+		
+		for(int i:subSet)
+			System.out.println(i);
+	}
+
+
+-------------------------------------------------------
+Sets Comparision 
+-------------------------------------------------------
+
+HashSet and													TreeSet  
+LinkedHashSet 
+---------------------------------------------------------------------------------------
+
+User Arrays and hash-functions 								uses balanced binary search tree + maintains order 
+under the hood 
+
+We can achieve O(1) constant  running time 					We can achieve guaranteed O(logN) logarithmic running time 
+
+Worst- Case running time is O(logN) 						Can not store null keys + no parameters to tune 
+
+Can store null keys as well 								
+															Needs less memory
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------
+Section 14: Sorting Collections 
+--------------------------------------------------
+
+---------------------------------------
+Sorting Arrays 
+---------------------------------------
+
+Java uses:-
+// Quicksort - to sort primitive types (int, float etc)
+// Mergesort - to sort reference types (Integer, String etc)
+Both these algorithms are extremely fast due O(logN) time complexity. Mergesort privides guaranteed O(logN) running time complexity while Quicksort provides, in worst-case scenario, quadratic running time complexity.
+
+Arrays.sort() is used to sort one-dimensional array in ascending order. We can not use this method in any way to  descend the array (But we can use for loop in reverse order). 
+for(int i=nums.length-1;i>=0;i--)
+			System.out.print(nums[i]+" ");
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public static void main(String[] args) {
+		
+		int[] nums = {1,10,-5,2,5,12,14,0,1,2};    (We can use Integer in place of int that means Arrays.sort() can be used for primitive types as well as reference 	types)
+		
+		Arrays.sort(nums);
+		
+		for(int i:nums)
+			System.out.print(i+" ");
+	}
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+---------------------------------------
+Sorting Collections 
+---------------------------------------
+
+
+Collections.sort() sorts the List interface  Collection objects in ascending order (by default). 
+
+We can reverse the order:-
+Collections.sort(listObject, Collections.reverseOrder());
+
+
+
+
+---------------------------------------
+Comparable Interface
+---------------------------------------
+
+How would you sort Objects like Person or Bikes etc. Comparable interface is here to rescue. 
+
+
+public class Book {
+	private String authorName;
+	private String title;
+	private int numOfPages;
+	
+	public Book() {
+		
+	}
+
+	public Book(String authorName, String title, int numOfPages) {
+		this.authorName = authorName;
+		this.title = title;
+		this.numOfPages = numOfPages;
+	}
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getNumOfPages() {
+		return numOfPages;
+	}
+
+	public void setNumOfPages(int numOfPages) {
+		this.numOfPages = numOfPages;
+	}
+
+	@Override
+	public String toString() {
+		return this.authorName+"-"+this.title+"-"+this.numOfPages;
+	}
+	
+}
+
+
+
+public static void main(String[] args) {
+		
+		List<Book> books = new ArrayList<>();
+		books.add(new Book("Joseph Murphy","The Power of Subconcious Mind",1123));
+		books.add(new Book("Dale Carnegie","How to win friends",456));
+		books.add(new Book("Alchemist","Paul Coehlo",323));
+		books.add(new Book("Harper Lee","To Kill a MockingBird",987));
+		
+		Collections.sort(books);// Error
+
+	}
+
+
+Here, Java will try to know on what basis it should compare books. Compare with authorName, title or numOfPages. That's why we would need to specify that. We can use Comparable interface or Comparator interface if we want our own sorting order.
+Moreover, sort method accepts those objects which implements Comparable interface. 
+static <T extends Comparable<? super T>> void sort(List<T> list)  	
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public class Book implements Comparable<Book>{
+	private String authorName;
+	private String title;
+	private int numOfPages;
+	
+	public Book() {
+		
+	}
+
+	public Book(String authorName, String title, int numOfPages) {
+		this.authorName = authorName;
+		this.title = title;
+		this.numOfPages = numOfPages;
+	}
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getNumOfPages() {
+		return numOfPages;
+	}
+
+	public void setNumOfPages(int numOfPages) {
+		this.numOfPages = numOfPages;
+	}
+
+	@Override
+	public String toString() {
+		return this.authorName+"-"+this.title+"-"+this.numOfPages;
+	}
+
+	@Override
+	public int compareTo(Book otherBook) {
+		return this.authorName.compareTo(otherBook.authorName);
+	}
+	
+}
+
+
+public static void main(String[] args) {
+		
+		List<Book> books = new ArrayList<>();
+		books.add(new Book("Joseph Murphy","The Power of Subconcious Mind",1123));
+		books.add(new Book("Dale Carnegie","How to win friends",456));
+		books.add(new Book("Alchemist","Paul Coehlo",323));
+		books.add(new Book("Harper Lee","To Kill a MockingBird",987));
+		
+		Collections.sort(books);
+
+		for(Book theBook:books)
+			System.out.println(theBook);
+	}
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+If we want to sort books on the basis of number of pages, override compareTo() method like this--
+@Override
+	public int compareTo(Book otherBook) {
+		return Integer.compare(this.numOfPages, otherBook.numOfPages);
+}
+
+If we want to sort books in reverse order, then
+@Override
+	public int compareTo(Book otherBook) {
+		return -Integer.compare(this.numOfPages, otherBook.numOfPages);
+}
+or 
+@Override
+	public int compareTo(Book otherBook) {
+		return -this.authorName.compareTo(otherBook.authorName);
+	}
+
+But, sometimes it does not work fine (Not a consisting approach if we are descending order just by adding a minus sign). So, we need to implement compareTo() like below--
+public int compareTo(Book otherBook){
+	if(this.numOfPages>otherBook.numOfPages) return -1;
+	if(this.numOfPages==otherBook.numOfPages) return 0;
+	else return +1;
+}
+
+
+
+----------------------------------------------------
+Comparator Interface 
+----------------------------------------------------
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public class Book{
+	private String authorName;
+	private String title;
+	private int numOfPages;
+	
+	public Book() {
+		
+	}
+
+	public Book(String authorName, String title, int numOfPages) {
+		this.authorName = authorName;
+		this.title = title;
+		this.numOfPages = numOfPages;
+	}
+
+	public String getAuthorName() {
+		return authorName;
+	}
+
+	public void setAuthorName(String authorName) {
+		this.authorName = authorName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public int getNumOfPages() {
+		return numOfPages;
+	}
+
+	public void setNumOfPages(int numOfPages) {
+		this.numOfPages = numOfPages;
+	}
+
+	@Override
+	public String toString() {
+		return this.authorName+"-"+this.title+"-"+this.numOfPages;
+	}
+
+	
+	
+}
+
+
+public class BookComparator implements Comparator<Book>{
+
+	@Override
+	public int compare(Book o1, Book o2) {
+		return Integer.compare(o1.getNumOfPages(), o2.getNumOfPages());
+	}
+
+}
+
+
+
+
+public class App {
+
+	
+	public static void main(String[] args) {
+		
+		List<Book> books = new ArrayList<>();
+		books.add(new Book("Joseph Murphy","The Power of Subconcious Mind",1123));
+		books.add(new Book("Dale Carnegie","How to win friends",456));
+		books.add(new Book("Alchemist","Paul Coehlo",323));
+		books.add(new Book("Harper Lee","To Kill a MockingBird",987));
+		
+		Collections.sort(books, new BookComparator());
+
+		for(Book theBook:books)
+			System.out.println(theBook);
+	}
+}
+
+
+
+If we want to reverse-- 
+Collections.sort(books,new BookComparator().reversed());   Using reversed() is much more consistent than using negative sigh in compare method.
+
+If we want to compare on the basis of title-- 
+@Override
+	public int compare(Book o1, Book o2) {
+		return o1.getTitle.compareTo(o2.getTitle);
+	}
+
+It is a bit better solution to use Comparator and define behaviour to sort objects outside the class. 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+-----------------------------------------
+Sorting With Lambdas
+-----------------------------------------
+
+
+Instead of using Comparable or Comparator, we can use Lambda Expression 
+
+Collections.sort(books, Comparator.comparing(Book::getTitle));
+If you want to reverse:-
+Collections.sort(books, Comparator.comparing(Book::getTitle).reversed());
+
+We can sort custom objects based on multiple parameters using Lambda Expression:-
+Demostration-:
+		persons.add(new Person("Adam",23));
+		persons.add(new Person("Adam",33));
+		persons.add(new Person("Adam",13));
+
+		Collections.sort(persons, Comparator.comparing(Person::getName)
+				.thenComparing(Person::getAge).reversed());
+
+		for(Person p:persons)
+			System.out.println(p.getName()+" - "+p.getAge());
+
+Output:-
+		Adam - 33
+		Adam - 23
+		Adam - 13
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------
+Section 15: Collections Class 
+-----------------------------------------------------------
+
+------------------------------------------
+Methods of the Collection Class 
+------------------------------------------
+
+- reverse()
+- min()/max()
+- shuffle()
+- rotate()
+- replaceAll()
+
+
+----------------------------------------------
+Unmodifiable Collections 
+----------------------------------------------
+
+
+public class App {
+
+	
+	public static void main(String[] args) {
+		
+		List<Integer> list = new ArrayList<>();
+		list.add(7);
+		list.add(10);
+		list.add(6);
+		list.add(11);
+		list.add(8);
+		list.add(5);
+		
+		list =Collections.unmodifiableList(list);
+		
+		modify(list);
+		
+		
+		
+		System.out.println(list);
+	}
+	public static int modify(List<Integer> list){
+		return list.remove(0);
+	}
+}
+
+
+
+
+Another Real Time Demonstration:-
+
+public class Node 
+{
+	List<Node> neighbours;
+
+	public Node(){
+		this.neighbours = new ArrayList<>();
+	}
+
+	public static List<Node> getNeighbours(){
+		return Collections.unmodifiableList(neighbours);   //But the use of unmodifiableList() method here is clear to me. How can someone modify ArrayList if I return it directly 
+	}
+}
+
+
+--------------------------------------------
+Synchronized Collections 
+--------------------------------------------
+public static void main(String[] args) {
+
+		// add() and remove() methods are also synchronized 
+		// It is not an efficient solution because of intrinsic lock- not that efficient 
+		// because threads have to wait for each other when want to execute independent methods
+		// (operations)
+		// Best Solution - CONCURRENT COLLECTIONS !!!
+		List<Integer> list = Collections.synchronizedList(new ArrayList<>());
+		
+
+		Thread t1 = new Thread(new Runnable(){
+			public void run() {
+				for(int i=0;i<1000;i++) {
+					list.add(i);
+				}
+			}
+		});
+		Thread t2 = new Thread(new Runnable(){
+			public void run() {
+				for(int i=0;i<1000;i++) {
+					list.add(i);
+				}
+			}
+		});
+		t1.start();
+		t2.start();
+		
+		try {
+			t1.join();
+			t2.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(list.size());
+	}
+	
+
+
+
+	
