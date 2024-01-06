@@ -1,0 +1,382 @@
+What is stream.
+What is the difference between map and flatMap.
+How to perform sum operation. 
+Name some important methods present in Stream object. 
+Sort a collection of objects which is of type Person (also in reverse order). (Person has the fields id, name, salary). 
+----------------------------------------------------------------------------------------
+List<String> list = {"Ankit","Anuj","Mohit","Zinnie","Mahendra","Swaroop","Suraj"}	
+Output: 
+A--> Ankit, Anuj	
+M--> Mohit, Mahendra
+S--> Swaroop, Suraj
+Z--> Zinnie
+-----------------------------------------------------------------------------------------
+How to perform grouping of a custom class on the basis of its particular field. 
+-----------------------------------------------------------------------------------------
+Other important uses of groupingBy method.
+-----------------------------------------------------------------------------------------
+What is Comparator interface.
+-----------------------------------------------------------------------------------------
+Give a brief explanation of sorted() method in java 8.
+-----------------------------------------------------------------------------------------
+How to find min and max from a stream of collection of objects. 
+-----------------------------------------------------------------------------------------
+Suppose there is a book with fields pages and name of the book. How to find the book with maximum pages. 
+-----------------------------------------------------------------------------------------------------------
+In the list of above books, find the total number of pages from all the books. 
+------------------------------------------------------------------------------
+Find the pages of longest book
+--------------------------------
+Explain allMath, anyMatch()
+--------------------------------
+Explain findFirst() and findAny()
+--------------------------------------
+How would you collect duplicate elements from a list.
+--------------------------------------------------------------------------------
+Does Stream object also contains max() method. If yes, then how does it work?
+--------------------------------------------------------------------------------
+What is the use of boxed()? In which class did you see it?
+----------------------------------------------------------------
+Find unique characters from a List of two words Hello and Shell.
+	List<String> list = Arrays.asList("Hello","Shell");
+---------------------------------------------------------------------------------------------
+Differentiate map() and flatMap() in detail using above example. Also compare their syntax.
+
+
+
+
+
+
+
+Answers
+------------------
+Question: What is stream.
+Answer: 
+A stream is a sequence of elements from a source and supports data processing operations. 
+Stream operations can be executed either sequentilly or in parallel. In stream api, there are two types of operations, intermediate operations (names) and terminal operations(names). 
+
+
+Question:What is the difference between map and flatMap.
+Ans:
+map() operation is used to transform each element of the stream using the provided function. The result of the map operation is a new stream where each element has been replaced by the result of applying the function to that element. It performs a one-to-one mapping, meaning each input element maps to exactly one output element. 
+
+flatMap() --> The flatMap operation is used when each element of the stream is a collection or another stream, and we wanted to flatten these nested structures into a single stream. 
+It performs a one-to-many mapping, meaning each input element can map to multiple output elements, and the results are then flattened into a single stream. 
+
+
+Question: How to perform sum operation.
+Ans:
+Integer [] nums = {1,5,3,-2,9,12};
+int sum = Arrays.stream(nums).reduce((a,b)->a+b).get();		(Here stream() method produces Stream type object which does not contain sum() method)	
+								(Just for the sake of Information, Stream object contains min(), max(), count() methods)
+
+int[] nums = {1,5,3,-2,9,12};
+int sum = Arrays.stream(numbs).sum();				(Here, stream() method will give IntStream type object which contains sum() method)
+
+
+
+Question: Name some important methods present in Stream object. 
+Ans:
+min() 
+max()
+count()
+collect()
+forEach() 
+sorted()
+reduce()
+
+
+
+Question: Sort a collection of objects which is of type Person (also in reverse order). (Person has the fields id, name, salary). 
+Ans:
+class Person
+{
+	private Integer id;
+	private String name;
+	private Long salary;
+	
+	public Person(Integer id, String name, Long salary) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.salary = salary;
+	}
+	//getters and toString 
+}
+
+s
+List<Person> list = Arrays.asList(
+	new Person(101,"AAA",1000L),
+	new Person(102,"DDD",7000L),
+	new Person(103,"BBB",11000L),
+	new Person(104,"CCC",9000L));
+
+/////////
+List<Person> list2=list.stream().sorted(Comparator.comparing(Person::getName)).collect(Collectors.toList());
+	Here, Person::getName is shorter way of writing 'p->p.getName'		(p is any variable of type Person, Since list is of type Person)
+	Explanation:- compararing method takes Function type reference. 
+	java.util.function.Function<T,R>
+		abstract R apply(T);
+	
+	Explanation With An example:--
+			interface I1<T,R>{
+				public abstract R show(T t);
+			}
+			class Hello{
+				public String mm() {
+					return null;
+				}
+			}		
+			
+			//In main method---> 
+			I1<Hello,String> ii=p->p.mm();
+			I1<Hello,String> iii = Hello::mm;
+	
+
+
+////Another Way
+List<Person> list2=list.stream().sorted(Comparator.comparing(p->p.getName())).collect(Collectors.toList());
+
+
+//// For reverse-order
+List<Person> list2=list.stream().sorted(Comparator.comparing(Person::getName).reversed()).collect(Collectors.toList());
+
+
+
+	
+Question: 
+List<String> list = Arrays.asList("Ankit","Anuj","Mohit","Zinnie","Mahendra","Swaroop","Suraj")
+Output: 
+A--> Ankit, Anuj	
+M--> Mohit, Mahendra
+S--> Swaroop, Suraj
+Z--> Zinnie
+
+
+Solution:
+	Map<String,List<String>> map=list.stream().collect(Collectors.groupingBy(str->str.substring(0,1)));
+	
+
+
+Question: How to perform grouping of a custom class on the basis of its particular field. 
+Ans:
+	Let's work with previous Person class. 
+	Map<String,List<Person>> map=list.stream().collect(Collectors.groupingBy(Person::getName));
+
+
+Question: Other important uses of groupingBy method.
+Ans:
+	groupingBy(...,Collectors.toList())	Ex--> groupingBy(Person::getName,Collectors.toList());		(Return type--> Map<String,List<Person>>)
+	groupingBy(...,Collectors.counting())   Ex--> groupingBy(Person::getName,Collectors.counting());	(Return type--> Map<String,Long>)
+	groupingBy(...,Collectors.maxBy(Comparator))
+		Example--> 
+		Map<String,Optional<Person>> map=list.stream().collect(Collectors.groupingBy(Person::getName,Collectors.maxBy(Comparator.comparing(Person::getSalary))));
+	
+			
+
+
+Question: What is Comparator interface.
+Ans:
+class java.util.Comparator<T>
+{
+	abstract int compare(T, T);
+	abstract boolean equals(java.lang.Object);
+	default java.util.Comparator<T> reversed();	
+	static reverseOrder();												===> Return Type:- Comparator
+	static comparing(java.util.function.Function<? super T, ? extends U>, java.util.Comparator<? super U>);		===> Return Type: Comparator
+	static  comparing(java.util.function.Function<? super T, ? extends U>);						===> Return Type: Comparator
+}	
+
+Question: Give a brief explanation of sorted() method in java 8.
+Ans: 
+	A method in java.util.stream.Stream class. It is an intermediate operation.
+	Two types of sorted() method:-
+		sorted()
+		sorted(java.util.Comparator<?super T>)
+
+
+Question: How to find min and max from a stream of collection of objects. 
+Ans: 
+	reduce(Integer::max)		(Returns Optional type)	(Use reduce method if there is Stream object)
+	reduce(Integer::min)
+	
+	Above code is the shorter version of ---> reduce((a,b)->{
+		if(a>b)
+			return a;
+		else if(b>a)
+			return b;
+		else 
+			return a;
+	})
+	
+	Explanation: 
+		reduce() method takes java.util.function.BinaryOperator. It takes 3 objects of same type. 
+		BinaryOperator extends java.util.fucntion.Bifunction which includes an abstract method which takes 2 parameters and return a result. 
+		BinaryOperator is just a modification of BiFunction when we need all three generice types  of same type.
+	
+	If there is IntStream, IntStream already contains min and max methods. 
+	
+	Example:
+		List<Integer> list = Arrays.asList(.....);
+		list.stream().mapToInt(e->e).max();
+		
+		
+Question: Suppose there is a book with fields pages and name of the book. How to find the book with maximum pages. 
+Ans:
+public class Book{
+	
+	private Integer pages;
+	private String bookName;
+	public Book(Integer pages, String bookName) {
+		super();
+		this.pages = pages;
+		this.bookName = bookName;
+	}
+	public Integer getPages() {
+		return pages;
+	}
+	public String getBookName() {
+		return bookName;
+	}
+	@Override
+	public String toString() {
+		return "Book [pages=" + pages + ", bookName=" + bookName + "]";
+	}	
+}
+
+
+////////Implementation///////////////////
+	List<Book> list=Arrays.asList(new Book(101,"Dragon"),
+		new Book(102,"Alaxor"),
+		new Book(103,"Call Dragon"),
+		new Book(104,"OceanInWater")
+	
+	list.stream().reduce((a,b)->a.getPages()>b.getPages()?a:b).ifPresent(System.out::println);
+	
+	
+	
+	Don't by confuse with Collectors.maxBy, It is used when we want to find max item in each group. 
+		Map<Integer,Optional<Book>> map=list.stream().collect(Collectors.groupingBy(Book::getPages,Collectors.maxBy(Comparator.comparing(Book::getPages))));
+		
+
+Question: In the list of above books, find the total number of pages from all the books. 
+Ans: 
+	Optional<Integer> o=list.stream().map(b->b.getPages()).reduce(Integer::sum);
+	if(o.isPresent())
+		System.out.println(o.get());
+	
+
+Alternative: We can convert Stream into IntStream, IntStream already contains sum method. 
+	int o=list.stream().mapToInt(x->x.getPages()).sum();
+	
+	
+Good To Know:: mapToInt() method takes java.util.function.ToIntFunction
+	public interface java.util.function.ToIntFunction<T> {
+	  public abstract int applyAsInt(T);
+	}
+
+
+Question: Find the pages of longest book
+Ans:
+	int i=list.stream().map(b->b.getPages()).reduce(Integer::max).get();
+	
+Alternative:
+	By Converting into IntStream and IntStream has max method----->
+	OptionalInt i=list.stream().mapToInt(b->b.getPages()).max();
+		if(i.isPresent())
+			System.out.println(i.getAsInt());		
+			
+
+Question: Explain allMath, anyMatch()
+Ans:
+allMatch(Predicate)
+-------------------
+	It checks whether all the elements of the Stream satisfy the provided predicate. 
+	It is a short-circuiting terminal operation. 
+	It returns true if stream is empty.
+	
+	Syntax: boolean allMatch(Predicate<? super T> predicate)
+	
+	Example
+		List<Integer> list = Arrays.asList(3,4,5,6,7,8,9,10,11,12);
+		
+		boolean answer=list.stream().allMatch(a->a%3==0);
+		
+		System.out.println(answer); //false
+	
+	(Note: Short-Circuiting --> A terminal operation is short-circuiting if when presented with infinite input, it may terminate in finite time.)
+
+anyMatch(Predicate)
+---------------------
+	It checks whether any element of the stream satisfy the provided predicate. 
+	It is a short-circuiting terminal operation. 
+	It returns false if stream is empty.
+	
+	Syntax: boolean anyMatch(Predicate<? super T> predicate)
+	
+
+Question: Explain findFirst() and findAny()
+Ans:
+findAny()
+-----------
+	It returns arbitrary element using parallization. 
+	Optional<T> findAny()
+	
+	
+findFirst()
+------------
+	It returns first element in sequential manner.
+
+
+Question: How would you collect duplicate elements from a list.
+Ans:
+	filter(e->Collections.frequency(list,e)>1)
+
+
+Question: Does Stream object also contains max() method. If yes, then how does it work?
+Ans: Yes.
+	
+List<Integer> list = Arrays.asList(3,4,5,6,7,8,9,10,11,12);
+	
+Optional<Integer> o=list.stream().max(Comparator.comparing(Integer::valueOf));
+
+
+Question: What is the use of boxed()? In which class did you see it?
+Ans:
+	IntStream has boxed() which returns Stream<Integer> object.
+
+
+Question: Find unique characters from a List of two words Hello and Shell.
+	  List<String> list = Arrays.asList("Hello","Shell");
+
+Ans: 
+	list.stream().map(x->x.split("")).flatMap(Arrays::stream).distinct().forEach(System.out::println);
+
+
+
+Question: Differentiate map() and flatMap() in detail using above example. Also compare their syntax.
+Ans:
+	<R> Stream<R> map(Function<T,R>)				(I am not using extents or super keywords)
+		list.stream().map(s->s.split("")) ===> Stream<String[])
+	<R> Stream<R> flatMap(Function<T, Stream<R);			(I am not using extents or super keywords)
+		
+	
+
+-------------------------------------------------------------------------------THE END--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

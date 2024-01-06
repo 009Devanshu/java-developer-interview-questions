@@ -18,8 +18,7 @@ Explain Factory Pattern in java?
 What is singleton design pattern. How would you make it thread-safe in multi-threaded environment? 
 What is serialization and Deserialization?
 Difference between stack and heap?
-Difference between map and flat map.
-Difference between stream and parallel stream.
+
 
 
 
