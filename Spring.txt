@@ -1,0 +1,818 @@
+Difference between Spring framework, SpringBoot and Spring MVC.
+What is Spring Initializer.
+What is Spring Boot starter project.
+What is auto-configuration.
+Important Annotations of Spring.
+What are lifecycle methods in spring.
+What is stereotype annotation.
+Define Spring MVC architecture.
+Difference between @RestController and @Controller.
+Difference between Put and Post.
+Difference between Put and Patch.
+Can we use @GetMapping instead of @PostMapping in resource creation.
+What is @ControllerAdvice annotation.
+What is spring IOC?
+What is Autowiring? Types of Autowiring?
+What is Spring Boot Actuator?
+Important httpstatus codes.
+Bean Scopes
+What is profiling?
+What are the different levels of logging?
+
+
+
+
+
+
+
+
+
+Answers
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Question: Difference between Spring, SpringBoot and Spring MVC.
+Ans:
+Purpose
+--------------
+Spring Framework: General purpose of spring framework is for enterprise java applications. 
+SpringBoot: Simplifies development and production deployment. 
+Spring MVC: Specialized for building web application.
+
+Configuration
+-----------------
+Spring Framework: Extensive Configuration required (XML or java-based)
+SpringBoot: Minimum configuration; convention over configuration
+Spring MVC: Moderate configuration (xml or annotations)
+
+
+Flexibility
+--------------------
+Spring Framework: Highly flexible and customizable
+SpringBoot: Opinionated defaults with override options
+Spring MVC: Flexible for web applications
+
+Use Cases
+-------------------
+Spring Framework: Large scale enterprise applications with complex requirements
+SpringBoot: Microservices, standalone application and rapid development
+Spring MVC: Web applications with clear MVC architecture
+
+Learning Curve
+------------------------
+Spring Framework: Steeper due to extensive features and configurations
+SpringBoot: Easy to learn and get started quickly
+Spring MVC: Moderate, especially for developers familiar with web development
+
+
+Boilerplate code
+------------------------
+Spring Framework: More boilerplate code due to extensive configuration
+SpringBoot: Reduced boilerplate code; follows convention over configuration
+Spring MVC: Moderate boilerplate code for web components
+
+Development Speed
+--------------------------
+Spring Framework: Slower due to detailed configuration
+SpringBoot: Faster development with sensible defaults
+Spring MVC: Moderate, considering configuration and mvc patterns
+
+
+
+Question: What is Spring Initializer.
+Ans:
+It is a web-based tool used to set-up springboot projects in an easier and efficient manner. It provides an extensive API to generate JVM-based projects, and to inspect metadata used to generate projects, for instance to list the available dependencies and versions.
+
+Spring Initializer---- start.spring.io
+Build Tool------ Maven (Other Build Tool available are Gradle-Groovy and Gradle-Kotlin)
+Language-----Java
+
+Spring Boot Version
+--------------------------
+There are three types of versions
+SNAPSHOT version
+Milestone version
+Released version
+
+
+Project Metadata
+---------------------------
+Group Id and ArtifactId are very similar to package name and class name.When we create an object, we place it in package. Similarly, we create project with name which is artifactId and place that name in GroupId.
+Name----- artifactId and name are by default same.
+Description
+Package Name --groupId-artifactId
+Packaging---- jar or war
+Java Version
+
+Dependencies
+--------------------
+
+
+
+Question: What is Spring Boot starter project.
+Ans:
+Spring Boot starter project are dependency descriptors that can be added under <dependencies> section in pom.xml file. These starter give all the dependencies under a single name. For example, to use spring data jpa to access database, we can add starter project spring-boot-starter-jpa.
+>Web application and Rest Api-- spring-boot-starter-web(spring-webmvc,spring-web,spring-boot-starter-tomcat,spring-boot-starter-json)
+>Unit Test --------------------- spring-boot-starter-test
+>Talk to database using Jpa----------------- spring-boot-starter-jpa
+>Talk to database using JDBC---------------- spring-boot-starter-jdbc
+>Secure your web-application or rest api------------------spring-boot-starter-security
+
+
+
+Question: What is auto-configuration.
+Ans:
+If we are using spring framework, we need lots of configuration for many components like component-scanning, dispatcher-servlet, json-conversion and datasources etc. Spring Boot provides opinionated defaults with override options.
+ 
+
+
+Question: Important Annotations of Spring.
+Ans:
+@Bean
+@Repository
+@Configuration
+@Controller
+@RequestMapping
+@Autowired
+@Component
+@SpringBootApplication
+@Qualifier
+
+
+@Bean:- The @Bean annotations are used at the method level and indicate that a method produces a bean that is to be managed by the Spring container. @Bean annotation is typically defined in @Configuration classes. We can also define it within classes annotated with @Component, @Service, @Repository. Although, we can also define @Bean annotation in @Controller and @RestController but it is not right practice. It will mix concerns and potentially leads to confusion.
+
+@Repository:- It indicates that the annotated class is Data Access Object(DAO) which accesses database directly. This annotation indicates that the class has the capacity of database CRUD operations.
+
+
+@Configuration:-It is used as a source of bean definitions and these bean definitions are defined with the help of @Bean annotation on the methods. It is a class-level annotation.
+
+
+@Controller:- The classs annotated with @Controller annotation handles http requests.  The controller annotation is a specialisation of the component annotation where it is auto-detected through the classpath scanning (Component Scanning). Component Scanning identifies the classes annotated with @Controller and registers them as components, making them accessible for handle web requests. It is typically paired with @RequestMapping(At class level).
+
+
+@RequestMapping:- It is used to map http request. It is used at the class level as well as at the method level. It has many other optional elements like url-path, method type. 
+
+
+
+@Autowired:- It is used to auto-wire spring bean on setter method, constructor and instance variable. It injects object dependency implicitly. When we use this annotation, the spring container auto-wires the bean by its matching data type.
+
+ 
+@Component:-It is a class-level annotation that turns the class into Spring bean and container auto-detect these beans for dependency injection.
+
+
+@SpringBootApplication:- It enables three features that are
+	    @EnableAutoConfiguration: enable Spring Boot’s auto-configuration mechanism
+	    @ComponentScan: 
+	    @Configuration: allow to register extra beans in the context or import additional configuration classes (@Import annotation)
+	    
+	  
+@Qualifier:-The @Qualifier annotation in Spring is used in conjunction with @Autowired to specify which bean should be autowired when multiple beans of the same type are present in the application context.
+
+Ex:
+	@Component
+	public class SomeService implements Service {
+	    // Class implementation
+	}
+
+	@Component
+	public class AnotherService implements Service {
+	    // Class implementation
+	}
+	
+
+	@Component
+	public class MyComponent {
+	    private final Service service;
+
+	    @Autowired
+	    public MyComponent(@Qualifier("someService") Service service) {
+		this.service = service;
+	    }
+	    // Other methods using 'service'
+	}
+
+
+Question: What are lifecycle methods in spring.
+Ans:
+Callback methods in SpringBoot are:-
+-------------------------------------------------------------------------
+Post-Initialization callback method
+Pre-destroy callback method
+
+
+	
+Post-Initialization callback method:-
+--------------------------------------------------------------------------
+	Using InitializingBean interface:
+	--------------------------------------
+	public class TestBean implements InitializingBean {
+	   public void afterPropertiesSet() {
+	      // post-initialization task.
+	   }
+	}
+
+	Using @PostConstruct Annotation
+	------------------------------------------------
+
+
+Pre-Destroy Callback methods
+---------------------------------------------------------------------------
+	Using DisposableBean interface
+	-----------------------------------------
+	public class TestBean implements DisposableBean {
+	   public void destroy() {
+	      // pre-destroy task.
+	   }
+	}
+	
+	Using Pre-Destroy Annotation
+	------------------------------------------
+	
+
+Question: What is stereotype annotation.
+Ans:
+Stereotype annotation is used to mark a java class as a bean.
+@Componenet annotation is the main annotation and other annotations @Service, @Repository, @Controller and @RestController are derived from @Component annotation. 
+
+
+
+Question: Define Spring MVC architecture.
+Ans: 
+Spring MVC Framework follows the Model-View-Controller architectural design pattern which works around the Front Controller i.e. the Dispatcher Servlet. 
+
+Model:Model encapsulates the application data. 
+View: view renders the model data and generates HTML output that the client's browser can interpret.
+Controller: Controller processes user requests by interacting with service layer and provides model and view name to dispatcher servlet.  
+
+The Dispatcher Servlet handles and dispatches all the incoming HTTP requests to the appropriate controller. The @Controller annotation defines that a particular class is a controller. @RequestMapping annotation maps web requests to Spring Controller methods.
+
+The process follows like:-
+All the requests are intercepted by DispatcherServlet which is a Front Controller.
+DispatcherServlet uses HandlerMapping which helps in mapping user requests with Request Handlers in Controller classes and forwards the request to a particula controller. 
+Controller processes the request and returns model and view name to dispatcher servlet. 
+DispatcherServlet invokes a particular view component from view resolver and renders the HTML out to the client's browser.
+
+
+
+Question: Difference between @RestController and @Controller.
+Ans:
+@Controller annotation is used to return view name through a request handler method. 
+@RestController is the combination of @Controller and @ResponseBody which is used to create RestFul webservices using Spring MVC. It returns String as a response body to the browser. It generally used to send JSON data to the browser.
+
+If we are using @Controller, and request handler method returning a string, that String is a view name which should be available as a component in the view resolver. 
+If we are using @RestController, and a request handler method returning a String, that string is a response body which will be displayed on the browser. 
+
+
+
+Question: Difference between Put and Post.
+Ans: 
+	PUT is used to create or update the resource at the specified URI location. The request body contains the entire updated resource. It has idempotency- repeating the same request yields the same result. If the existing resource does not exist, a new one will be created. If the existing resource exists, it will be completely replaced with the content of the body.
+
+/ PUT example  
+PUT /users/1
+{
+  "name": "Ichiro",
+  "age": 22
+}
+
+	POST is used to create a new resource at the specified URI location. The request body contains data for creating the new resource. It does not have idempotency- repeating the same request may produce different results. 
+	
+// POST example
+POST /users  
+{
+  "name": "Saburo",
+  "age": 18
+}
+
+
+
+Question: Difference between Put and Patch.
+Ans:
+PUT - recommended when Updating an existing resource entirely.
+Patch - recommended when Updating an existing resource partially.
+
+Problem Demonstration of using PUT while updating only a certain fields --
+
+Suppose we have a resource --
+{
+	"id": 4,
+	"name": "Mixer Grinder",
+	"price": 4999,
+	"description": "Bosch",
+	"productType": "Kitcher and Home"
+}
+
+We want to update only price field--
+
+put/...localhost:8080/{id}
+{
+	"name": "Mixer Grinder",
+	"price": 9999,
+	"description": "Bosch",
+	"productType": "Kitcher and Home"
+}
+
+Here the Problem is that we just need to update only price but need to write all the fields in json body. If we write only the field that we want to be updated then 
+other field values will be inserted as null or whatever the default values that have--
+
+put/...localhost:8080/{id}
+{
+	"name": "Mixer Grinder",
+	"price": 9999,
+	
+}
+
+Then the resource will be updated as --
+put/...localhost:8080/{id}
+{
+	"name": "Mixer Grinder",
+	"price": 9999,
+	"description": null,
+	"productType": null
+}
+
+
+Question: Can we use @GetMapping instead of @PostMapping in resource creation.
+Ans:
+We can create resource using @GetMapping but it is against Rest API design conventions. Get request is intended to be idempotent and should not change the state of server. Post is designed to be non-idempotent and can change the state of server by creating a resource. 
+ If we create resource using @GetMapping, it may bring lots of issues:
+ 	Violation of REST principles
+ 	Caching and Proxing
+ 	Security Concern: CSRF Attack
+ 
+ 
+
+Question: What is @ControllerAdvice annotation.
+Ans:
+It is a specialization of @Component annotation.  It is used to make global exceptio handler classes and acts as an interceptor of excpetions thrown by methods annotated with @RequestMapping and similar.
+It declares @ExceptionHandler, @InitBinder or @ModelAttribute methods to be shared across multiple @Controller classes.
+
+@ControllerAdvice
+public class StudentRestExceptionHandler {
+
+	@ExceptionHandler
+
+	public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc) {
+		StudentErrorResponse error = new StudentErrorResponse();
+		error.setStatus(HttpStatus.NOT_FOUND.value());
+		error.setMessage(exc.getMessage());
+		error.setTimeStamp(System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+
+	}
+
+}
+
+
+Question: What is spring IOC?
+Ans:
+It is a mechanism is spring that handles the creation and management of objects. According to Spring documentation, IOC is also known as dependency injection. It is a process whereby objects define their dependencies, that is, the other objects they work with, only through constructor injection, setter injection or field injection. 
+
+
+
+Question: What is Autowiring? Types of Autowiring?
+Ans: 
+Autowiring feature of spring framework enables us to inject object dependency implicitly. It internally uses setter, constructor or field injection. 
+It works only with reference object. 
+
+Types of Autowiring:-
+-------------------------
+byName
+byType
+Constructor
+Setter
+@Qualifier	(In case of conflicts between beans)
+Custom Qualifier Annotation
+@Primary
+JSR-250 Annotation: @Resource
+JSR-330 Annotation: @Inject
+
+---------------------------
+byType
+---------------------------
+public interface Car
+{
+	String drive();
+}
+
+@Service
+public SedanCar implements Car
+{
+	@Override
+	public String drive(){
+		return "Driving Sedan Car...";
+	}	
+}
+
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Autowired
+	private Car car; //byType ----> It will check the type of available bean. It will find that SedanCar is of type Car.
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+
+Let's create one more service:-
+@Service
+public class TeslaCar implements Car{
+	
+	@Override
+	public String drive(){
+		return "drive Tesla Car...";
+	}
+}
+
+
+
+Now, if we run the application, we will get error due to conflict.
+Error:- Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed. 
+
+We are going to use @Qualifier--->> It resolves the conflict between beans. 
+
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Autowired
+	@Qualifier("teslaCar")
+	private Car car; //byType 
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+Now, lets autowire using byName--> 
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Autowired
+	private Car teslaCar; //byName --->> Name of Bean that we want to inject is TeslaCar, so using name teslaCar
+	
+	@GetMapping
+	public String drive(){
+		return teslaCar.drive();
+	}
+}
+
+Till now, we were doing Field Injection:-- 
+Let's do constructor injection-->
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	
+	private final Car car; 
+	
+	@Autowired
+	public CarController(@Qualifier("teslaCar") Car car){
+		this.car=car;
+	}
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+Now, let's do setter injection--->
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	
+	private final Car car; 
+	
+	@Autowired
+	public void setCar(@Qualifier("teslaCar") Car car){
+		this.car=car;
+	}
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+---------------------------------
+Custom Qualifier Annotation
+---------------------------------
+
+@Qualifier
+@Target({ElementType.FIELD,ElementType.PARAMETER,ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CarQualifier{
+
+	String value();
+	
+}
+
+And update our constroller-->
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	
+	private final Car car; 
+	
+	@Autowired
+	public void setCar(@QCarQualifier("teslaCar") Car car){
+		this.car=car;
+	}
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}18:52 / 25:29
+}
+
+
+If you don't want to autowire your beans, suppose there 100 beans and you want to autowire few of the beans------>
+Let's remove TeslaCar service by removing @Service annotation from the TeslaCar class.
+Now, if we run the application, we will get compile-time error. 
+Now, 
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	
+	private final Car car; 
+	
+	@Autowired(required=false)
+	public void setCar(@QCarQualifier("teslaCar") Car car){
+		this.car=car;
+	}
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+It will give error at run-time only. 
+(Note: required=false is going to work on setter only)
+
+
+-------------------------------
+@Primary
+-------------------------------
+
+@Primary works like a @Qualifier. @Primary is annotated on the service bean. 
+
+@Primary
+@Service
+public class TeslaCar implements Car{
+	
+	@Override
+	public String drive(){
+		return "drive Tesla Car...";
+	}
+}
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Autowired
+	private final Car car; 
+		
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+---------------------------------
+JSR-250 Annotation: @Resource
+---------------------------------
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Qualifier("teslaCar")
+	@Resource
+	private final Car car; 
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+@Resource work like autowire along with @Qualifier.
+
+
+@Resource narrows down the search path to find out the required bean to inject--->
+1. first byName
+2. then byType
+3. and finally by Qualifiers (ignored if match is found by name)
+
+---------------------------------------------
+JSR-330 Annotation: @Inject
+---------------------------------------------
+
+To use @Inject, we will need to add dependency--->
+javax.inject
+
+
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Qualifier("teslaCar")
+	@Inject
+	private final Car car; 
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+@Inject will also work like @Autowire along with @Qualifier.
+
+We can also use @Named annotation instead of @Qualifier with @Inject. @Named annotation is also JSR-330 annotation.
+@RestController
+@RequestMapping("/cars")
+public CarControlloer{
+	
+	@Named("teslaCar")
+	@Inject
+	private final Car car; 
+	
+	@GetMapping
+	public String drive(){
+		return car.drive();
+	}
+}
+
+
+
+Some points on @Autowired and @Inject---> 
+@Autowired and @Inject will narrow down the search --->
+1. first byType
+2. then by Qualifier
+3. finally byName
+
+Difference between @Autowired and @Inject---
+------------------------------------------------
+@Inject--> It is the part of java CDI so it is loosely coupled. In future, if we are using different framework. It will not cause any problem. Default scope is singleton.
+@Autowired--> It is the part of spring framework so it is tightly coupled. Default scope is prototype.
+
+
+If dependency injection should be handled by Jakarta EE platfor-- We can use @Resource and @Inject
+If dependency injection should be handled by spring framework ---> We can  @Autowired
+
+
+
+Question: What is Spring Boot Actuator?
+Ans:
+It exposes endpoints to monitor and manage our application.
+Important Actuator endpoints---
+	/info
+		Default is empty. 
+		Update application properties with the application information.
+			info.app.name
+			info.app.description
+			info.app.version
+	/beans
+	/mappings
+	/threaddump: Running all the threads in our application.
+
+To enable actuator, we need to add a dependency in pom.xml file--> 
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+	
+We can manage actuator endpoints by adding properties in application.propertied--> 
+	We can define application property ---> 	
+		management.endpoints.web.exposure.include=*
+		management.endpoints.web.exposure.exclude=*	(Or we can specify particular endpoints name instead of using *)
+		
+
+
+Question: Important httpstatus codes.
+Ans:
+200: Success
+201: Created	
+204: No Content	(while Update)
+401: Unauthorized (when authorization fails)
+400: Bad Request (Such as validation Error)
+404: Resource not found 
+500: Server Error 	
+
+
+Question: Bean Scopes
+Ans:
+There are five types of bean scopes:-
+---------------------------------------
+Singleton: Onle one instance will be created for the spring container. This is the default bean scope. 
+Prototype: A new instance will be created every time the bean is requested from the spring container.
+Request: This is same as prototype scope, however it’s meant to be used for web applications. A new instance of the bean will be created for each HTTP request.
+Session: A new bean will be created for each HTTP session by the container.
+Web Session: This is used to create global session beans for Portlet applications.
+
+We use @Scope annotation to define scopes. 
+
+Spring Bean Singleton and Prototype Scope:
+--------------------------------------------------
+package com.journaldev.spring;
+
+public class MyBean {
+
+	public MyBean() {
+		System.out.println("MyBean instance created");
+	}
+
+}
+
+package com.journaldev.spring;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class MyConfiguration {
+	
+	@Bean
+	@Scope(value="singleton")
+    public MyBean myBean() {
+		return new MyBean();
+	}
+	
+}
+
+package com.journaldev.spring;
+
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class MySpringApp {
+
+	public static void main(String[] args) {
+		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+		ctx.register(MyConfiguration.class);
+		ctx.refresh();
+
+		 MyBean mb1 = ctx.getBean(MyBean.class);
+		 System.out.println(mb1.hashCode());
+
+		 MyBean mb2 = ctx.getBean(MyBean.class);
+		 System.out.println(mb2.hashCode());
+
+		ctx.close();
+	}
+
+}
+
+We will get same hashCodes. 
+If i change scope to request. We will get error becuase it is not a web application. It is a standalone application. 
+
+
+Question: What is profiling?
+Ans:
+We provide different configuration for different environments, this is called profiling. 
+For example, we want to provide configuration for dev and want to provide logging level of trace for dev. 
+application-dev.properties
+	logging.level.org.springframework=trace
+	
+application.properties
+	spring.profiles.active=dev
+
+
+Question: What are the different levels of logging?
+Ans:
+
+Different levels of logging
+---------------------------
+trace
+debug
+info
+warning
+error
+off
+
+
+
+
+
+
+
