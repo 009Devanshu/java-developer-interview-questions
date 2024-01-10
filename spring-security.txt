@@ -1,0 +1,378 @@
+What is Security?
+What are different types of security?
+What is spring security?
+What are spring security filters?
+What is Authentication object in spring securiry?
+What is AuthenticationManager?
+What is AuthenticationProvider and Why do we need it?
+What is UserDetailsManager/UserDetailsService?
+What is SecurityContext?
+Explain Spring Security Internal Flow.
+What is defaultSecurityFilterChain() method? 
+What is the difference between Authentication and UserDetails?
+How to define multiple users along with their authorities?
+Difference between Encoding, Encryption and Hashing.
+What is PasswordEncoder in Spring Security?
+What is CORS?
+What is CSRF?
+Difference between Authentication and Authorization?
+How authorities are stored in spring security?
+How would you configure Authorities in spring security?
+What is the difference between Authority and role?
+How to configure role in spring security.
+What are filters in Spring Security and how can we implement them?
+What is JWT token?
+What is method level security?
+
+
+Answer
+----------------------
+Question: What is Security?
+Ans: 
+Security is for protecting your data and bussinesss logic inside our application.
+
+Question: What are different types of security?
+Ans:
+Securiry for a web-application can be of different types
+Firewall security
+https
+ssl
+Authentication
+Authorization etc
+
+Question: What is spring security?
+Ans:
+Spring Security is a bunch of filters to protect our data and bussinesss logic of our java application using various standards like username/password authentication, JWT tokens, OAuth2 etc.
+
+
+Question: What are spring security filters?
+Ans:
+It is a series of spring security filters that intercepts each request and work together to identify if authentication is required or not. If authentication is required, accordingly navigate the user to login page or use the existing details stored during initial authentication.
+
+
+
+Question: What is Authentication object in spring securiry?
+Ans:
+Filters like UsernamePasswordAuthenticationFilter extracts username/password from http request and prepare an Authentication type object. Because Authentication is the core standard of storing authenticated details in spring security framework. 
+
+
+Question: What is AuthenticationManager?
+Ans:
+It recieves Authentication object from filter and delegates the validating of user details to Authentication Providers. Since there can be multiple providers, it is the responsibility of AuthenticationManager to manage all the Authentication Providers available.
+
+
+
+Question: What is AuthenticationProvider and Why do we need it?
+Ans:
+AuthenticationProvider contains all the bussiness logic to authenticate user details. The default implementation of AuthenticationProvider which is DaoAuthenticationProvider invokes UserDetailsManager to access user details and PasswordEncoder for validating the password.
+We can provide our own authentication logic by implementing AuthenticationProvider interface. 
+
+Question:What is UserDetailsManager/UserDetailsService?
+Ans:
+UserDetailsService is the core interface which loads user-specific data. It has an abstract method loadUserByUsername(String username). 
+UserDetailsManager is an interface which implements UserDetailsService and it provides various operations like retrieval, creation, update and delete from DB or any storage system.
+There are various implementation classes of UserDetailsManager. These implementation class are InMemoryUserDetailsManager, JdbcUserDetailsManager, and LDAPUserDetailsManager. 
+
+Note: All these interfaces and implementation classes use UserDetails interface and its implementation class User because it provides core user information.
+
+Question: What is SecurityContext?
+Ans
+Once Authentication is completed, usually Authentication details are stored in thread-local SecurityContext which is managed by SecurityContextHolder.
+
+
+Question: Explain Spring Security Internal Flow.
+Ans:
+1. User trying to access secure page for the first time. 
+2. Behind the scenes, filters like AuthorizationFilter, DefaultLoginPage filter intercept the request and identify that the user is not logged in. Since user is not logged in, they navigate the user to default login page. 
+3. User enters the credentials
+4. Request is intercepted by UsernamePasswordAuthenticationFilter that extracts the information from the request and creates UsernamePasswordAuthenticationToken object which is the implementation of Authentication interface. With the object created, it invokes authenticate() method of Provider Manager. 
+5. ProviderManager which is the implementation of AuthenticationManager identify the list of AuthenticationProviders available that are supporting given Authentication object style. In the default behaviour, authenticate() method of DaoAuthenticationProvider will be invoked by ProviderManager.
+6. DaoAuthenticationProvider invokes loadUserbyUsername() of InMemoryUserDetailsManager (if we are using InMemoryUserDetailsManager) to load user details from memory. Once, the user details are loaded, it takes help from PasswordEncoder to compare password to check if user is authenticated or not. 
+7. DaoAuthenticationProvider returns the Authentication object to ProviderManager with details including whethe user is authenticated or not. If Authentication is not successful, ProviderManager will choose another AuthenticationProvider and if successful, it will return the object to filters. 
+8. Authentication object will be stored in the SecurityContext for future use and user will be logged in. 
+
+
+
+Question: What is defaultSecurityFilterChain() method?
+Ans:
+It is a method present in the class SpringBootWebSecurityConfiguration. Spring framework provides default implementation for this method and by default all the endpoints are protected. We override this method if we want to customize security for different endpoints. 
+
+This is the default implementation by spring security framework:-
+@Bean
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
+SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
+	http.authorizeHttpRequest((requests)->requests.anyRequest().authenticated());
+	http.formLogin(withDefaults());
+	http.httpBasic(withDefault());
+	
+	return http.build();
+}
+
+We can override this method:-
+-------------------------------------
+
+@Bean
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
+SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
+	http.authorizeHttpRequests((requests)-> requests
+		.requestMatchers("/endpoint","/endpoint").authenticated()
+		.requestMatchers("endpoint").permitAll());
+	http.formLogin(withDefaults());
+	http.httpBasic(withDefaults());
+	
+	return http.build();
+}
+
+
+
+Question: What is the difference between Authentication and UserDetails? Both stores user details.
+Ans: 
+Authentication type object like UsernamePasswordAuthenticationToken is created when user is trying to login. It stores login credentials. It is the return type in all the scenario where we want to determine whether the authentication is successful or not. 
+UserDetails is the return type in all the scenario where we want to load user details from storage system like DB.
+
+
+
+Question: How to define multiple users along with their authorities?
+Ans:
+We can use:-
+InMemoryUserDetailsManager
+-------------------------------------
+@Bean
+InMemoryUserDetailsManager userDetailsService(){
+	UserDetails admin=UserDetails.withUsername("admin").password("12345").authorities("admin");
+	UserDetails user=UserDetails.withUsername("user").password("12345").authorities("user");
+	
+	return new InMemoryUserDetailsManager(admin,user);
+}
+
+@Bean
+PasswordEncoder passwordEncoder(){
+	return NoOpPasswordEncoder.getInstance();
+}
+
+
+JdbcUserDetailsManager
+-----------------------------
+@Bean
+UserDetailsService userDetailsService(DataSource dataSource){
+	return JdbdUserDetailsManager(dataSource);
+}
+
+@Bean 
+PasswordEncoder passwordEncoder(){
+	return NoOpPasswordEncoder.getInstance();
+}
+
+
+Question: Difference between Encoding, Encryption and Hashing.
+Ans:
+Encoding
+-------------
+Encoding is defined as the process of converting data from one form to another. It has nothing to do with cryptography. It has not secret and easily convertible. It can not be used to secure data. 
+Ex: ASCII, UNICODE, BASE64
+
+Encryption
+-----------------
+Encryption can protect data. It uses key. As long as key is secured, confidentiality will be guaranteed. Because anyone can decrypt the data using the key. 
+
+Hashing
+-------------------
+It is the most secured way and once the data is converted to hash value. No one can reverse it to the original data. 
+
+
+
+Question: What is PasswordEncoder in Spring Security?
+Ans:
+public interface PasswordEncoder{
+
+	String encode(CharSequence rawPassword);
+
+	boolean matches(CharSequence rawPassword, String encodedPassword);
+	
+	//Another method
+}
+
+There are different implementations of PasswordEncoder inside spring security:-
+
+NoOpPasswordEncoder	(Not recommended for prods)
+StandardPasswordEncoder (Not recommended for prods)
+
+BCryptPasswordEncoder
+SCryptPassworEncoder
+
+Question: What is CORS?
+Ans:
+It stands for Cross Origin Resource Sharing. It enables scripts running on a browser client to interact with resource from different origin. 
+It is the default protection provided by modern browsers.
+
+Other Origin means:
+> Different Schene (http or https)
+> Different domain 
+> Different port
+
+To allow communication, we can use @CrossOrigin annotation on the Controller class or on the method of controller class. 
+	@CrossOrigin(origin="http://localhost:4200"
+	
+Instead of mentioning @CrossOrigin on each controller classes, we can define cors related configuration -->
+In the configuration, we make CorsConfiguration class and use methods like setAllowedOrigins(), setAllowedMethods().
+
+
+ 
+Question: What is CSRF?
+Ans:
+Cross-Site-Request-Forgery (CSRF) aims to perform operation in a web-application on behalf of an user without their consent. 
+
+Solution to CSRF attack--> 
+CSRF token per user token. 
+
+Note: (You can explain using Spring Security PDF, but it is enough)
+
+
+
+Question: Difference between Authentication and Authorization?
+Ans: 
+In authentication, identity of user is checked to provide access to the system. In Authorization, user's authorities is checked to provide access to particular resources. 
+
+Authentication always happen before authorization. Authorization always happen after authentication.
+
+Authentication needs user's login details. Authorization needs user's priviledges or roles.
+
+If Authentication fails, we get 401 error response. If Authorization fails, we get 403 error response.
+
+
+
+Question: How authorities are stored in spring security?
+Ans:
+Authorities/roles information is stored inside GrantedAuthority. It is an interface which has only one abstract method getAuthority(). SimpleGrantedAuthority is the default implementation of GrantedAuthority interface. 
+
+public interface GrantedAuthority{
+	
+	String getAuthority();
+	
+}
+
+public final class SimpleGrantedAuthoriry implements GrantedAuthority{
+	
+	private final String role;
+	
+	public SimpleGrantedAuthority(String role){
+		this.role=role;
+	}
+	
+	@Override
+	public String getAuthority(){
+		return role;
+	}
+}
+
+Authentication and User class (implementation of UserDetails interface) has getAuthorities() method. 
+
+
+
+Question: How would you configure Authorities in spring security?
+Ans:
+hasAuthority() ---> Accepts single authority against for which the endpoint will be configured and user will be validated against the single authority mentioned. Only users having the same authority can invoke the endpoint. 
+
+hasAnyAuthority() ---> Accepts multiple authorities against for which the endpoint will be configured and user will be validated against the multiple authorities mentioned. 
+
+access() ---> It uses Spring Expression Language and it provides unlimited possibilities to configure authorities. We can use operators like AND , OR inside access method. 
+
+
+SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
+	
+	...
+	...
+	http.authorizeHttpRequests((requests)->requests
+		.requestMatchers("").hasAuthority("VIEWACCOUNT")
+		.requestMatchers("").anyAuthoriry("","")
+		.requestMatchers("").authenticated()
+		.requestMatchers().permitAll());
+	..
+	..
+}
+
+
+Question: What is the difference between Authority and role?
+Ans:
+Authority is like an individual priviledge or action. Whereas role is a group of priviledges or actions.
+
+Authoriry restricts access in fine-grained manner. Whereas role restricts access in coarse-grained manner. 
+
+Some examples of Authorities are VIEWACCOUNT, VIEWCARD etc.
+Some examples of Roles are ROLE_ADMIN, ROLE_USER etc
+
+
+
+Question: How to configure role in spring security.
+Ans:
+hasRole()
+hasAnyRole()
+access()
+
+
+Question: What are filters in Spring Security and how can we implement them?
+Ans:
+Filter is a component which intercepts request, process it and handover to next filter in security filter chain. There are various built in filters provided by Spring security like UsernamePasswordAuthenticationFilter, BasicAuthenticationFilter, DefaultLoginPageGeneratingFilter and AuthenticationFilter etc. 
+Lots of time we have situation where we need housekeeping activities during authentication and authorization like---> 
+	> Input validation
+	> Tracing, Auditing and Reporting
+	> Logging of input like ip address etc
+	> Encryption and Decryption 
+	> Multifactor Authentication using OTP
+	
+All such requirements can be handled using filtets in spring security. We can create our own filters by implementing Filter interface and overriding doFilter method which takes these arguments ServletRequest, ServletResponse and FilterChain. 
+We can add our custome filter before, after or at the position of a particular filter. 
+	addFilterBefore(filter,class)
+	addFiterAfter(filter,class)
+	addFilterAt(fltter,class)
+
+
+
+Question: What is JWT token?
+Ans:
+JWT means JSON Web Token. It is generated when user get login or authenticated for the first time. For any further request, client send this token in the query string or authorization header. Server validated the token and returns the secured resource to the client. 
+JWT token can be used both in the scenario of Authorization and Authentication along with information exchange which means we share some user related data in the token itself which will reduce the burder on maintaining such details in the sessions on the server side. 
+JWT token has 3 parts:-
+	1. Header
+	2. Payload
+	3. Signature (Optional)
+	
+1. JWT header stores meta/info about the token. If we choose to sign the token, this header contains name of the algorithm of that signature. It is encoded with Base64 encoding system.
+2. Payload --> It contains information related to user, roles etc. 
+3. Signature --> To create the signature, we take encoded Header, encoded payload, a secret and the algorithm specified in the header. 
+	For example if we are using HMAC SHA256 algorithm
+		HMAC SHA26(Base64encoded(Header) + "." + Base64encoded(Payload),secret)
+
+
+Question: What is method level security?
+Ans:
+We generally use spring security to authorize users our apis and urls. But, we can use method level security at each layer of our application like Service layer or Repository layer. We use @EnableMethodSecuriry on the class. 
+Method level security is also helpful in non-web applications where we don't have endpoints. 
+
+More detail after a break/////
+
+
+
+
+
+
+-------------------------------------------------------------------------------NOT THE END--------OAuth2 And OPENID ARE LEFT------------------------------------------------------------------------	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

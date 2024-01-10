@@ -1,0 +1,10 @@
+Gtk-Message: 20:30:44.735: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+[GFX1-]: Wayland protocol error: warning: queue 7f5f6cb1d550 destroyed while proxies still attached:
+
+[GFX1-]: Wayland protocol error:   wl_display@1 still attached
+
+Gtk-Message: 20:30:47.664: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+libva info: VA-API version 1.20.0
+libva info: Trying to open /snap/firefox/3600/gnome-platform/usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_20
+libva info: va_openDriver() returns 0
