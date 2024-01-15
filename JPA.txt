@@ -1,0 +1,374 @@
+What is JPA?
+What is a database transaction and how is it used in JPA?
+What are the benefits of using JPA over JDBC?
+Difference between JPA repository and CRUD repository. Explain with an example.
+What is a Named Query in JPA? How is it used? And what are the benefits of using this?
+What are the various query methods in JPA to retrieve data from the database? List some of the most used methods.
+What is the purpose of EntityManager in JPA?
+What is the difference between EntityManager.find() and EntityManager.getReference() methods in JPA?
+Difference between JpaRepository.save() and JpaRepository.saveAndFlush() methods?
+What is the purpose of the EntityManagerFactory in Spring Data JPA?
+How does JPA handle optimistic locking? Can you give an example of how you would implement optimistic locking in JPA?
+What is the purpose of the @Version annotation in JPA? How is it used in optimistic locking? Explain the concept in detail.
+How can you use JPA to perform pagination of query results?
+How does EntityManager.lock() work?
+Explain the difference between a shared cache mode and a local cache mode in JPA? What are the advantages and disadvantages of each?
+
+
+
+Answers
+--------------
+JPA (Jakarta Persistence API) is a specification for managing data persistence in java applications. JPA simplifies the process of writing code for data persistence by providing a high level abstraction layer over the data storage technology, such as relational databases. JPA helps in mapping Java Objects to relational database tables and allow developers to perform CRUD operations on data. 
+JPA is often used with Hibernate, a open source ORM framework. 
+JPA is part of Jakarta EE and often used in enterprise applications. 
+
+
+Question: What is a database transaction and how is it used in JPA?
+Ans:
+A database transaction is a sequence of database operations that are executed as a single logical unit of work. A transaction is typically used to ensure data consistency and integrity by ensuring that either all the operations of transaction are executed or none of them are executed. 
+JPA defines jakarta.persistence.EntityTransaction that manages transaction of database operations between java object and relational database. 
+	EntityManager.getTransaction() returns EntityTransaction
+	EntityTransaction has method begin() to begin the transaction, commit() to commit the transaction and rollback() in case of any error.
+	
+Question: What are the benefits of using JPA over JDBC?
+Ans:
+Handle all low-level sql.
+Minimize boiler-plate code.
+Maps Java Object to database table. 
+Portability--> Not vendor locked in
+It provides caching mechanism to improve performance.
+It provides transaction management which simplifies the process of managing datatabase transaction.
+
+
+Question: Difference between JPA repository and CRUD repository. Explain with an example.
+Ans:
+JPARepository
+------------------
+JPARepository is an interface provided by Spring Data JPA that extends JPA's Repository interface. 
+It provides a set of methods for performing common operations on entities, such as save, delete, findAll, findById. In addition to these methods, it also allows to define custom query methods using @Query annotation. 
+
+CRUDRepository
+-------------------
+CRUDRepository is an interface provided by Spring Data that provides a set of methods for performing CRUD operations. save(), delete(), findAll(), findById()
+
+
+Difference between JPARepository and CRUDRepository
+---------------------------------------------------------
+JPARepository extends the functionality of CRUDRepository by providing additional methods and the ability to define custome queries. 
+
+
+
+
+For example, We have an entity called Product with the properties:id, name, description and price. 
+
+CRUDRepository Example
+--------------------------
+import org.springframework.data.repository.CrudRepository;
+public interface ProductRepository extends CrudRepository<Product, Long> {
+
+} 
+
+
+JPARepository Example
+-------------------------
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findByPriceGreaterThan(double price);
+    
+    @Query("SELECT p FROM Product p WHERE p.name LIKE %?1%")
+    List<Product> findByNameContaining(String keyword);
+}
+
+
+Question: What is a Named Query in JPA? How is it used? And what are the benefits of using this?
+Ans:
+In JPA, a named-query is a pre-defined query that is given a name and can be used in multiple places of an application. It is defined on Entity class with @NamedQuery annotation and can be used to retrieve entities based on specific criteria.
+
+@Entity
+@NamedQuery(
+	name="Product.findByPriceGreaterThan",
+	query="select p from Product p where p.price > :price"
+)
+public class Product{
+	
+	...
+}
+
+
+
+In our repository class:-
+---------------------------
+TypedQuery<Product> query = entityManager.createNamedQuery("Product.findByPriceGreaterThan",Product.class);
+query.setParameter("price",100);
+List<Product> products=query.getResultList();
+
+Benefits of NamedQuery in JPA
+-------------------------------------
+Reusability--> Named queries can be defined once and used multiple times throughout the application
+Performance---> Named queries are compiled and cached by JPA provider. 
+Maintenance---> Named queries can be modified or updated at the central location rather than scattered throughout the codebases. 
+
+
+
+
+Question: What are the various query methods in JPA to retrieve data from the database? List some of the most used methods.
+Ans:
+1)createQuery("JPQL", Your_Entity.class):- This method creates a JPQL query which is used to retrieve data from database. 
+
+2)createNamedQuery("Name of Named_Query",Your_Entity.class):- This method creates Named JPQL query which is defined on the entity class. 
+
+
+3)createNativeQuery():- This method creates native SQL query that can be used to retrieve data from database using SQL syntax. Native SQL query is used when JPQL query is not sufficient. 
+
+
+4)find()
+
+
+5)getReference():-This method is used to obtain reference(proxy) from database without actually loading its data from database. This method is used when we want relationship between multiple entities without fetching Entities data immediately.
+	Lont id=1;
+	User user = entityManager.getReferenc(User.class,id);
+	
+	System.out.println(user.getId()); //Now the data will be loaded
+	
+6)createQuery(criteriaQuery):- It uses JPA Criteria Query. It used programmatic and type-safe way without using String based queries (like JPQL or SQL)
+	//Create a criteria query for specific entity
+	CriteriaBuilder<Product> criteriaBuilder = entityManager.getCriteriaBuilder();
+	
+	//create criteria query for specific entity
+	CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+
+	Root<Product> productRoot = criteriaQuery.from(Product.class);
+	criteriaQuery.select(productRoot);
+	
+	// Execute the query using createQuery
+        List<Product> products = entityManager.createQuery(criteriaQuery).getResultList();
+        
+        
+7)getSingleResult(): This method executes a query and returns a single result. If the query returns more than one result or no results, an exception is thrown.
+
+
+8)getResultList(): This method executes a query and returns a list of results. If the query returns no results, an empty list is returned.
+
+
+
+
+Question: What is the purpose of EntityManager in JPA?
+Ans:
+The EntityManager in JPA is an interface through which an application interacts with persistence context which is responsible for managing the lifecycle of entity objects and their persistence in database. The EntityManager provides a set of APIs for performing crud on database-->
+	> createQuery
+	> findAll
+	> findById
+	> deleteById and so on.
+	
+Question: What is the difference between EntityManager.find() and EntityManager.getReference() methods in JPA?
+Ans:
+find()---> It returns entity if it exists in persistence context or database. So, it follows eager loading.
+getReference()---> It returns proxy reference of Entity, not real entity until it is accessed. It follows lazy loading.
+
+find()---> If the entity instance is not found in the persistence context or database, it returns null.
+getPersistence()---> After using the method which returns proxy instance. If we use method other thatn getId() method, if entity does not exist, we get EntityNotFoundException.
+
+find()---> It can be used to retrieve entity from managed or detached state. 
+getPersistence()---> It returns a managed entity if the entity is present in persistence context, otherwise returns a hollow reference that is not managed by persistence context.
+
+find()---> It throws IllegalArgumentException if the entity passed to the method is not a valid entity type.
+getPersistence()---> It throws EntityNotFoundException if entity does not found in database.
+
+
+
+Question: Difference between JpaRepository.save() and JpaRepository.saveAndFlush() methods?
+Ans:
+Both JpaRepository.save() and JpaRepository.saveAndFlush() save the entity or update the entity in database. 
+
+Transaction---->
+	JpaRepository.save()---> The changes made to the entity are not immediately persisted in the database. They are persisted when the current transaction is committed.
+	JpaRepository.saveAndFlush()---> The changes made to the entity are immediately persisted to the database, regardless of whether the current transaction is committed or not.
+	
+	
+If we want to see changes immediately in database, we should go with saveAndFlush() method.
+
+Performance--->
+	save() method is faster than saveAndFlush() method, because it does not immediately persist data into database.
+	saveAndFlush() is slower than save(), because it immediately persist data into database, which can  be a performance bottleneck if used excessively.
+	
+
+
+Question: What is the purpose of the EntityManagerFactory in Spring Data JPA?
+Ans:
+EntityManagerFactory is responsible for creating EntityManager instances.
+EntityManagerFactory manages the lifecycle of EntityManager instances and is thread-safe.
+It is automatically created by spring boot based on the information provided in application.properties and dependecies in pom.xml file.
+It is responsible for managing connection to the database and can be configured with various properties to control the behaviour of the EntityManager instances it creates. 
+
+
+Question: How does JPA handle optimistic locking? Can you give an example of how you would implement optimistic locking in JPA?
+Ans:
+JPA provides support for optimistic locking through the use of version fields. Optimistic locking is the concurrency control mechanism that allows multiple transactions to access the same data concurrently while ensuring data consistency.         (In multithreaded-environment)
+
+In JPA, optimistic locking is implemented by defining a version field in Entity class. This version field is automatically updated by persistence provided each time when entity is updated. When entity is updated, JPA checks if the version of the Entity in the database matches the version of entity in persistence context. If the version do not matches, it means another transaction has modified the entity in meantime, and JPA throws an OPtimisit Locking Exception. 
+
+@Entity
+public class Employee {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+
+    @Version
+    private int version;
+
+    // getters and setters
+}
+
+Now let's say we want to update an employee's name:-
+--------------------------------------------------------
+EntityManager em = entityManagerFactory.getEntityManager();
+em.getTransaction().begin();
+
+Employee employee=em.find(Employee.class,1L);
+employee.setName("John Doe");
+
+em.getTransaction().commit();
+em.close();
+
+
+When we call em.getTransaction().commit(), JPA checks the version of the employee entity in the database against the version of the employee entity in the persistence context. If the versions match, JPA updates the entity and increments the version number. If the versions do not match, JPA throws an optimistic locking exception.
+
+
+Question: What is the purpose of the @Version annotation in JPA? How is it used in optimistic locking? Explain the concept in detail.
+Ans:
+The purpose of the @Version annotation in JPA is to define a version field on an entity that can be used for optimistic locking.
+
+When an entity is updated in JPA, the persistence provider checks whether the version of the entity in the database matches the version of the entity in the persistence context. If the versions match, JPA updates the entity and increments the version number. If the versions do not match, it means that another transaction has modified the entity in the meantime, and JPA throws an optimistic locking exception.
+The field should be integer or timestamp type.
+
+The @Version annotation can be applied to only one field per entity class. If the entity has more than one field that needs to be used for optimistic locking, you can create a composite version field using an embedded object or a concatenated string.
+
+
+
+Question: How can you use JPA to perform pagination of query results? 
+Ans:
+JPA provides support for the pagination of query results through the use of the setFirstResult and setMaxResults methods of the Query interface.
+
+EntityManager em = entityManagerFactory.getEntityManager();
+Query query = em.createQuery("SELECT * FROM Employee e ORDER BY e.name");
+query.setFirstResult(0);	//Starting index of results to return
+query.setMaxResults(10);	//Maximum number of results to return
+List<Employee> list = query.getResultList();
+em.close();
+
+
+Question: How does EntityManager.lock() work?
+Ans:
+In addition to Automatic Optimistic locking provided by JPA, the EntityManager interface provides a lock() method that allows you to manually acquire a lock on an entity to prevent other transactions from modifying it until the lock is released.
+Two types of locks are available in JPA, one is optimistic lock and another one pessimistic lock.
+Optimistic Lock:-
+-------------------
+Optimistic locking is a strategy where transactions assume that conflicts between transactions are unlikely to occur. Instead of locking data during entire transaction, optimistic locking allows multiple transactions to proceed concurrently and only checks for conflicts at the time of commiting the changes. 
+Use Cases:- It is suitable when likelihood of conflit is very low. 
+
+EntityManager entityManager = // obtain EntityManager
+MyEntity entity = entityManager.find(MyEntity.class, entityId);
+entityManager.lock(entity, LockModeType.OPTIMISTIC);
+
+
+Pessimitic Lock:-
+-------------------
+ Pessimistic locking is a strategy where transactions acquire locks on data, preventing other transactions from accessing or modifying it until the lock is released. This approach is more cautious, as it assumes that conflicts are likely to occur, and it aims to prevent them by explicitly locking the data.
+ 
+ Use Case: It's suitable when conflicts are more likely, and you want to ensure exclusive access to the data during a transaction.
+ 
+EntityManager entityManager = // obtain EntityManager
+MyEntity entity = entityManager.find(MyEntity.class, entityId);
+entityManager.lock(entity, LockModeType.PESSIMISTIC_WRITE);
+
+
+
+Question: Explain the difference between a shared cache mode and a local cache mode in JPA? What are the advantages and disadvantages of each?
+Ans:
+1) Shared cache mode allows multiple ‘EntityManager’ instances to share the same cache. This means that if one ‘EntityManager’ instance loads an entity from the database and stores it in the cache, another ‘EntityManager’ instance can retrieve the same entity from the cache without having to hit the database. The shared cache is managed by the JPA provider and is typically implemented using a second-level cache. The advantage of shared cache mode is that it can improve application performance by reducing the number of database queries. However, the disadvantage is that it can lead to consistency issues if the cache is not properly managed.
+
+2) Local Cached Mode:- When an entity is loaded from the database using an ‘EntityManager’ in local cache mode, it is stored in the local cache of that ‘EntityManager’ instance. Subsequent requests for the same entity within that ‘EntityManager’ instance will be retrieved from the local cache instead of hitting the database.
+The advantage of local cache mode is that it provides greater control over the caching process and avoids potential consistency issues. However, the disadvantage is that it can lead to increased memory usage and slower performance if large numbers of entities are cached.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

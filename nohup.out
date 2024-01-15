@@ -8,3 +8,33 @@ libva info: VA-API version 1.20.0
 libva info: Trying to open /snap/firefox/3600/gnome-platform/usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
 libva info: Found init function __vaDriverInit_1_20
 libva info: va_openDriver() returns 0
+Gtk-Message: 14:58:34.646: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+[GFX1-]: Wayland protocol error: warning: queue 7efc5061c4f0 destroyed while proxies still attached:
+
+[GFX1-]: Wayland protocol error:   wl_display@1 still attached
+
+Gtk-Message: 14:58:38.802: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+libva info: VA-API version 1.20.0
+libva info: Trying to open /snap/firefox/3600/gnome-platform/usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_20
+libva info: va_openDriver() returns 0
+[22196] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index2/size
+[22196] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index3/size
+[22196] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/present
+[22196] Sandbox: attempt to open unexpected file /sys/devices/system/cpu
+[26039] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index2/size
+[26039] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index3/size
+[26039] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/present
+[26039] Sandbox: attempt to open unexpected file /sys/devices/system/cpu
+[26203] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index2/size
+[26203] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index3/size
+[26203] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/present
+[26203] Sandbox: attempt to open unexpected file /sys/devices/system/cpu
+[26315] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index2/size
+[26315] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index3/size
+[26315] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/present
+[26315] Sandbox: attempt to open unexpected file /sys/devices/system/cpu
+[28131] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index2/size
+[28131] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/cpu0/cache/index3/size
+[28131] Sandbox: attempt to open unexpected file /sys/devices/system/cpu/present
+[28131] Sandbox: attempt to open unexpected file /sys/devices/system/cpu
