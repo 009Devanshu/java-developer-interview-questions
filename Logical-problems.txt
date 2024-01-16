@@ -1,0 +1,374 @@
+1] Find second largest number of an array using single for loop.
+2] How to convert primitive type array into List.
+3] How to convert Integer type array to int type array. (Simple for loop)
+4] How to convert List into Integer type array.
+5] aaabbcccddaabccd-----> a3b2c3d2a2b1c2d1    (Also can do using below method in single for loop)
+6] Find occurence of a particular number in series  1 to 1000.
+7] convert first letter of each word  into capital letter  in a String in java. 
+8] Do above question using java 8
+9] Find out whether a number is palindrome.
+10] Find out whether a String is palindrome.
+11] Find factorial using recursion.
+12] Find febonacci series using recursion or without recursion .
+13] How to convert array into String?
+14] Move all upper case characters of a String to end?
+15] Find out whether a number a perfect number or not?
+16] Remove duplicate characters in a String? (One you already know, another method is given below)
+17] Remove duplicate words from a given sentence?
+18] Print t1 1, t2 2, t1 3, t2 4 and so on. t1, t2  are threads.
+19] Convert first letter of each word of a String  into capital letter. 
+20] Pring febonacci series.
+21] Find whether a number is prime or not?
+
+
+
+
+
+
+
+Solutions:
+----------------------------------------------------------------------------------------
+1] public class SecondLargestElement {
+    public static int findSecondLargest(int[] arr) {
+        int largest = Integer.MIN_VALUE; // Initialize to the smallest possible integer value
+        int secondLargest = Integer.MIN_VALUE;
+
+        // Traverse the array
+        for (int num : arr) {
+            // Update largest and secondLargest if a larger value is found
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            }
+            // Update secondLargest if a value between the current secondLargest and largest is found
+            else if (num > secondLargest && num != largest) {
+                secondLargest = num;
+            }
+        }
+
+        // Return the second largest element
+        return secondLargest;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 10, 8, 3, 9};
+        int result = findSecondLargest(arr);
+        System.out.println("Second largest element: " + result); // Output: Second largest element: 9
+    }
+}
+
+
+2]public static List<Integer> convertIntArrayToList(int[] array) {
+        return Arrays.stream(array) // Create a stream from the int array
+                .boxed() // Convert each int element to Integer using autoboxing
+                .collect(Collectors.toList()); // Collect the elements into a List
+    }
+
+
+3]
+public static int[] convertIntegerArrayToIntArray(Integer[] integerArray) {
+        return Arrays.stream(integerArray)
+                .mapToInt(Integer::intValue) // Convert Integer to int using intValue()
+                .toArray(); // Convert the stream back to int[]
+    }
+    
+    
+4]
+ List<Integer> list = Arrays.asList(100,200,300);
+       Integer i[] = list.toArray(new Integer[0]);
+       
+5]
+public class Test2 {
+	public static void main(String[] args) {
+			
+		String str = "aaavvddaaa";
+		
+		StringBuffer sb = new StringBuffer();
+		int count=1;
+		for(int i=1;i<str.length();i++)
+		{
+			if(str.charAt(i)==str.charAt(i-1))
+			{
+				count++;
+				
+			}
+			else
+			{
+				sb.append(str.charAt(i-1)).append(count);
+				count=1;
+			}
+		}
+		sb.append(str.charAt(str.length()-1)).append(count);
+		System.out.println(sb.toString());
+	}
+	
+} 
+    
+    
+6]
+
+7]
+String str = "i am devanshu";
+		String s[]= str.split(" ");
+		StringBuffer sb = new StringBuffer();
+		for(int i=0;i<s.length;i++) {
+			char c = s[i].charAt(0);
+			String firstChar = c+"";
+			String sw =  firstChar+s[i].substring(1);
+			sb.append(sw).append(" ");
+		}
+		System.out.println(sb);
+    
+    
+    
+8]
+String input = "hello world";
+        String output = Arrays.stream(input.split(" "))
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
+                .collect(Collectors.joining(" "));
+        System.out.println(output);
+    }
+    
+    
+9]
+int n = 12324;
+		 int m=n;
+		 int res= 0;
+		 int digit = 0;
+		 while(n>0) {
+			 digit = n%10;
+			 res = res*10+digit;
+			 n=n/10;
+		 }
+		 if(res==m) {
+			 System.out.println("Yes");
+		 }
+		 else {
+			 System.out.println("No");
+		 }
+		 
+		 
+10]
+String str = "12321";
+		StringBuffer sb = new StringBuffer();
+		for(int i=str.length()-1;i>=0;i--) {
+			sb.append(str.charAt(i));
+			 
+		}
+		System.out.println(sb);
+		if(sb.toString().equals(str)) {
+			System.out.println("Palindrome");
+		}
+		else {
+			System.out.println("No");
+		}
+	
+11]
+public static int getFactorial(int num) {
+		if(num==0 || num==1) {
+			return 1;
+		}
+		
+		return num * getFactorial(num-1);
+	}
+	public static void main(String[] args) {
+		int result = getFactorial(5);
+		System.out.println(result);
+	}
+	
+12]
+int n1=0,n2=1;
+		int n3=0;
+		System.out.print(n1+" "+n2);
+		for(int i=2;i<=7;i++) {
+			n3=n1+n2;
+			n1=n2;
+			n2=n3;
+			System.out.print(" "+n3);
+		}
+		
+13]
+int [] a= new int[5];
+ a[0]=10;
+ a[1]=20;
+ a[2]=30;
+ a[3]=40;
+ a[4]=50;
+		String str = Arrays.toString(a);
+		System.out.println(str);
+	}
+
+14]
+String str = "aaBBsAAGGgF";
+	StringBuffer s = new StringBuffer();
+	for(int i=0;i<str.length();i++) {
+		char c=str.charAt(i);
+		if(c>='A' && c>='Z') {
+			s.append(c);
+		 	str =  str.substring(0,i)+"" +str.substring(i+1);
+		 	i--;
+		}
+		
+		
+	}
+	str=str+s;
+	System.out.println(str)
+	
+
+14A]
+String str = "agklUklsgKIgskUI";
+	StringBuilder sb1 = new StringBuilder();
+	StringBuilder sb2 = new StringBuilder();
+	str.chars().mapToObj(c->(char)c).forEach(e->{
+		if(Character.isUpperCase(e)) {
+			sb1.append(e);
+		}else if(Character.isLowerCase(e)) {
+			sb2.append(e);
+		}
+	});
+	String result = sb2.append(sb1).toString();
+	System.out.println(result);
+
+15]
+int n=6;
+int m=n/2;
+int sum=0;
+for(int i=1;i<=m;i++) {
+	if(n%i==0) {
+		sum=sum+i;
+	}
+}
+
+16]
+String str = "agklUklsgKIgskUI";
+	LinkedHashSet<Character> set = new LinkedHashSet<>();
+	for(int i=0;i<str.length();i++) {
+		set.add(str.charAt(i));
+	}
+	 String ss= set.stream()
+	 .map(e->e+"")
+	 .collect(Collectors.joining());
+	System.out.println(ss);
+	
+17]
+public static void main(String[] args) {
+	String str = "Hello Hello i am devanshu and you you";
+	String s[] =  str.split(" ");
+	String ss = removeDuplicate(s);
+	System.out.println(ss);
+}
+public static String removeDuplicate(String str[]) {
+	
+	
+	LinkedHashSet<String> set = new LinkedHashSet<>();
+	StringBuffer sb = new StringBuffer();
+	for(String s:str) {
+		set.add(s);
+	}
+	for(String s:set) {
+		sb.append(s).append(" ");
+	}
+	return sb.toString().trim();
+}
+
+
+18]
+public class Main {
+    final static Object o = new Object();
+    private static int count = 1;
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new Runnable() {
+            public void run() {
+                while (count<=30) {
+                    synchronized (o) {
+                        if (count % 2 != 0) {
+                            System.out.println("t1 " + (count++));
+                            o.notify();  // Notify t2 to take its turn
+                        } else {
+                            try {
+                                o.wait();  // Wait for t2 to print
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            public void run() {
+                while (count<=30) {
+                    synchronized (o) {
+                        if (count % 2 == 0) {
+                            System.out.println("t2 " + (count++));
+                            o.notify();  // Notify t1 to take its turn
+                        } else {
+                            try {
+                                o.wait();  // Wait for t1 to print
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        t1.start();
+        t2.start();
+    }
+}
+
+19]
+public static void main(String[] args) {
+	String str = "Hello Hello i am devanshu and you you";
+	String s[] = str.split(" ");
+	StringBuffer sb = new StringBuffer();
+	for(int i=0;i<s.length;i++) {
+		String c = s[i].charAt(0)+"";
+		s[i]= c.toUpperCase()+ s[i].substring(1);
+		sb.append(s[i]).append(" ");
+	}
+	System.out.println(sb.toString());
+}
+	
+
+20]
+	
+21]
+int n = 25;
+int m=n/2;
+for(int i=2;i<=m;i++) {
+	if(n%i==0) {
+		System.out.println("Not a prime number");
+		break;
+	}
+	else {
+		System.out.println("prime number");
+	}
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+			 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+    
+
+
+
+
