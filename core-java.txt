@@ -18,13 +18,48 @@ Explain Factory Pattern in java?
 What is singleton design pattern. How would you make it thread-safe in multi-threaded environment? 
 What is serialization and Deserialization?
 Difference between stack and heap?
+What is the access modifier of abstract method inside an abstract class?
+----------------------------------------------------------------------------
+Below is the code. Find out what will be the output and why?
+public class Hello {
+	
+	int a=10;
+	int b=20;
+	static int c=30;
+	{
+		System.out.println("IB1 in Hello");
+	}
+	static {
+		System.out.println("SB1 in Hello");
+	}
+	{
+		System.out.println("IB2 in Hello");
+	}
+	
+}
 
+public class Jtc {
 
-
-
-
-
-
+	int aa=111;
+	static int bb=222;
+	{
+		System.out.println("IB1 in Jtc");
+		System.out.println(aa);
+		System.out.println(bb);
+	}
+	static {
+		System.out.println("SB1 in Jtc");
+		//System.out.println(aa);
+		System.out.println(bb);
+	}
+	public static void main(String[] args) {
+		System.out.println("In Main");
+		System.out.println(Hello.c);
+		Hello h1 = new Hello();
+		Hello h2 = new Hello();
+		Jtc j = new Jtc();
+	}
+}
 
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -192,7 +227,7 @@ Question: Different Access Modifiers in java?
 public --> 
 protected --> The access level of a protected modifier is within the package and outside the package through the child class. If you do not make the child class, it cannot be accessed from outside the 		package.	(Within the same package, can be accessed using object or inheritence)
 default --> The access level of a default modifier is only within the package. It cannot be accessed from outside the package.	(Within the same package, can be accessed using object or inheritence)
-private
+
 
 
 
@@ -901,19 +936,101 @@ When sub-class object reference is referred by super-class object reference vari
 
 
 
+Question: What is the access modifier of abstract method inside an abstract class?
+Ans:
+It is default. (That means package protected)
+
+Example:
+package com.p1;
+
+public abstract class AbstractFoo {
+
+	//A method with default visibility
+	 abstract void bar();
+}
+
+package com.p1;
+
+public class Foo extends AbstractFoo{
+	@Override
+	void bar() {}			(It is completely OK, because access modifier in both the methods (for super abstract class and child abstract class) is default. 
+}
 
 
 
+Question: 
+Below is the situattion:--
+Is it correct?
+public class Hello {
+		
+	{
+		
+		System.out.println(a);			
+	}
+	int a;
+	
+}
 
 
+Question: Below is the code. Find out what will be the output and why?
+Solution:
+
+public class Hello {
+	
+	int a=10;
+	int b=20;
+	static int c=30;
+	{
+		System.out.println("IB1 in Hello");
+	}
+	static {
+		System.out.println("SB1 in Hello");
+	}
+	{
+		System.out.println("IB2 in Hello");
+	}
+	
+}
+
+public class Jtc {
+
+	int aa=111;
+	static int bb=222;
+	{
+		System.out.println("IB1 in Jtc");
+		System.out.println(aa);
+		System.out.println(bb);
+	}
+	static {
+		System.out.println("SB1 in Jtc");
+		//System.out.println(aa);
+		System.out.println(bb);
+	}
+	public static void main(String[] args) {
+		System.out.println("In Main");
+		System.out.println(Hello.c);
+		Hello h1 = new Hello();
+		Hello h2 = new Hello();
+		Jtc j = new Jtc();
+	}
+}
+Output:-
+---------------------
+SB1 in Jtc
+222
+In Main
+SB1 in Hello
+30
+IB1 in Hello
+IB2 in Hello
+IB1 in Hello
+IB2 in Hello
+IB1 in Jtc
+111
+222
 
 
-
-
-
-
-
-
+When we run the class with main method. jvm calls main method. Before invoking main method, jvm loads the class. While loading the class all static variables will be initialized and static blocks will be processed. Now, it will access the main method.
 
 
 

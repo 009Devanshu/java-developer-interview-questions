@@ -1,0 +1,118 @@
+How can you initialize final variable and static final variable.
+*************************************************************************************************************************************************************
+What would be error in the below code?
+
+
+
+CONCEPT OF METHOD HIDING AND DIFFERENCE FROM OVERRIDING
+-------------------------------------------------------------------------
+CASE1:
+-------
+class Parent{
+	public static void m1() {
+		
+	}
+}
+class Child extends Parent{
+	public void m1() {	//The instance method from Child class can not override static method from Parent
+		
+	}
+}
+
+
+CASE2:
+---------
+class Parent{
+	public void m1() {
+		
+	}
+}
+class Child extends Parent{
+	public static void m1() {	//static method of child class can not override static method of Parent class
+		
+	}
+}
+
+CASE3: 
+---------
+class Parent{
+	public static void m1() {
+		
+	}
+}
+class Child extends Parent{
+	public static void m1() {
+		
+	}
+}
+This is method hiding.
+
+**********************************************************************************************************************
+Difference between Method Hiding and Method Overriding
+
+Method Hiding					Method Overriding
+---------------------------------------------------------------------------------------
+Both methods must be				Both methods must be non-static 
+static
+
+Method resolution takes care by 		Method resolution takes care by jvm based on runtime object
+compiler based on reference type
+
+
+It is considered as compile-time,		It is considered as runtime polymorphism or dynamic polymorphism or late binding.
+or static polymorphism or 
+early binding.
+
+
+****************************************************************************************************************************************************************************************
+
+In CASE 3 above, what would happen if we also declare Parent class method as final. 
+We will get compile-time error. Because final will disable the method from being hidden.
+
+
+
+
+
+*******************************************************************************************************************************************
+
+Question: How can you initialize final variable and static final variable.
+Ans:
+The final variable can be initialized at the time of --->
+	At the time of declaration
+	With the help of block
+	Constructor
+The static final variable can be initialized at the time of ---> 
+	At the time of declaration
+	static block
+	
+	
+
+****************************************************************************************************************************************************************************************
+Question: What would be error in the below code?
+Ans
+class Hello{
+	int a;
+	final int b;
+	static final int c;
+	static {
+		System.out.println("SB in Hello");
+		
+	}
+	/*public Hello(){					Compiler will give error if immediate 
+		
+	}*/
+	static {
+		System.out.println("SB in Hello");
+		c=100;
+	}
+	public Hello(int b1) {
+		b=b1;
+	}
+}
+
+
+
+
+
+
+

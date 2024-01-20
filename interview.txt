@@ -1,0 +1,198 @@
+class Parent{
+	public void show(Parent p) {
+		
+	}
+
+}
+class Child extends Parent{
+					
+	public void show(Child c) {		It is not overriding show() method of Parent class. Because parameters of both methods of Parent and Child should be same.
+		
+	}
+}
+
+//Main Method
+Parent p = new Child();
+p.show(p);
+
+
+In the above code . There is no problem.
+---------------------------------------------------------------------------------------------
+
+class Parent{
+	public Object show(Parent p) {
+		return null;
+	}
+
+}
+class Child extends Parent{
+	@Override
+	public String show(Parent c) {
+		return null;
+	}
+}
+
+This code is OK.
+
+------------------------------------------------------------------------------------------------------
+public static int mm() {
+		try {
+			System.out.println("try block");
+			throw new Exception("Error");
+		}
+		catch(Exception e) {
+			System.out.println("catch block");
+			return 1;
+		}
+		finally {
+			System.out.println("finally block");
+			return 2;
+		}
+	}
+
+
+It will return 2. 
+return of finally block will override return on catch block.
+
+
+------------------------------------------------------------------------------------------------------
+Many to Many Relationship
+	1)How many tables will be created. 
+	2)How many entities will be there. 
+	
+1) 3 tables in database---> 2 tables for entity and 1 is Join Table
+2) Two Entities
+
+Join Table--> A table that provides a mapping between two tables. It has foreign keys for each table to define the mapping relationship. 
+
+course					course_student				student
+----------				-------------------			----------------				
+id INT(11)				course_id INT(11)			id INT(11)	
+title varchar(128)			student_id INT(11)			first_name varchar(45)
+										last_name varchar(45)
+										email varchar(45)
+course_student is join table 
+
+course_student table creation:---
+-----------------------------------
+CREATE TABLE `course_student` (
+`course_id` int(11) NOT NULL,
+`student_id` int(11) NOT NULL,
+PRIMARY KEY (`course_id`, `student_id`),
+
+CONSTRAINT `FK_COURSE_05`
+FOREIGN KEY (`course_id`)
+REFERENCES `course` (`id`),
+CONSTRAINT `FK_STUDENT`
+FOREIGN KEY (`student_id`)
+REFERENCES `student` (`id`)
+);
+
+
+@Entity
+@Table(name="course")
+public class Course {
+
+	..
+	..
+	@ManyToMany
+	@JoinTable(
+	name="course_student",
+	joinColumns=@JoinColumn(name="course_id"),
+	inverseJoinColumns=@JoinColumn(name="student_id")
+	)
+	private List<Student> students;
+	// getter / setters
+…
+}
+
+@Entity
+@Table(name="student")
+public class Student {
+	…
+	@ManyToMany
+	@JoinTable(
+	name="course_student",
+	joinColumns=@JoinColumn(name="student_id"),
+	inverseJoinColumns=@JoinColumn(name="course_id")
+	)
+	private List<Course> courses;
+	// getter / setters
+	..
+}
+------------------------------------------------------------------------------------------------------
+What is SQL Dialect?
+Ans:
+The dialect specifies the type of database used in hibernate so that hibernate generates appropriate type of SQL statements. It converts Hibernate specific database operation like HQL into native sql queries.
+There are many dialect classes defined for RDBMS in org.hibernate.dialect package. 
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+-------------------------------------------------------------------------------------------------------------
+Variable in marker interface?
+Ans:
+We can not define constants or methods inside marker interface. 
+
+
+--------------------------------------------------------------------------------------------------------------
+System.exit(0);---> IT is for normal termination.
+System.exit(10);---> IT is for abnormal termination. It also print the message with status code. (exit status is 3)
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Some Tests
+-------------------
+
+class Hello{
+	void m1()
+	{}
+}
+class Hai extends Hello{
+	void m1(int a)
+	{}
+}
+It is ok.
+
+Similarly:-
+class Hello{
+	static void m1()
+	{}
+}
+class Hai extends Hello{
+	void m1(int a)
+	{}
+}
+It is OK.
+
+Similarly:-
+class Hello{
+	final void m1()
+	{}
+}
+class Hai extends Hello{
+	void m1(int a)
+	{}
+}
+It is ok. 
+Reason:- We are not overriding m1() of parent class. m1(int) is just another method of child class although m1() method of parent class is visible.
+
+
+class Hello{
+	private void m1()
+	{}
+}
+class Hai extends Hello{
+	void m1()		//It will be ok for static, non-static, final, non-final, private etc. Because m1() method of parent class is not visible in child class. So, m1() method in child class 
+	{}			//has no restriction.
+}
+
+
+
+
+
+
+
+
+
+
+
+
