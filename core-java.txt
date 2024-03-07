@@ -19,6 +19,10 @@ What is singleton design pattern. How would you make it thread-safe in multi-thr
 What is serialization and Deserialization?
 Difference between stack and heap?
 What is the access modifier of abstract method inside an abstract class?
+Is Java Platform Independent if then how?
+What are the top Java Features?
+What is Robustness in java?
+Can we declare only variables inside interface?
 ----------------------------------------------------------------------------
 Below is the code. Find out what will be the output and why?
 public class Hello {
@@ -108,14 +112,14 @@ Types of Polymorphism
 
 [2] Difference between interface and abstract class? 
 Ans:
+Abstract classes generalize behaviour and contains both abstract and non-abstract methods. Interface standardize behaviour. 
+Interface is used to build a contract that specifies a set of methods that a class must implement. 
 
-Abstract class does not use default keyword to provide default implementation of method. interface use default keyword to provide default implementation of a method.
-Abstract class can have final, non-final, static and non-static variables. interface has only static and final variables.
-Abstract class does not support multiple inheritence. nterface supports multiple inheritence.
-Abstract class can provide the implementation of interface. interface can not provide the implementation of abstract.
+Abstract class does not allow multiple inheritence because if two parents have same method which one do we take, it becomes uncertain. But, we can implement multiple interfaces because in the case of abstract class it really matters which behaviour we are taking. But, in the case of interfaces, it does not really matter because the purpose of an interface is to standardize behaviour. So, if two interfaces have exact same signature, it means our implementation class only adheres to that signature. 
 
+Abstract class does not use default keyword to provide default implementation of method. Interfaces uses default keyword to provide default implementation of a method. 
 
-
+Abstract class can have final, non-final, static and non-static variables. Interface has only public static final variables and public abstract methods.  
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 [3] What is method overloading?
@@ -364,7 +368,7 @@ Thread can not be created using Callable interface whereas a thread can be creat
 
 Question: Behaviour of default method and static method in functional interface. 
 Ans:
-default method was introduced in java 8 to support backward compatibility. It allows developers to add new methods in interface with default implementations, and implementation classes does not to override them, making it easier to update and enhance libraries without causing distruptions in existing codebases. 
+default method was introduced in java 8 with support of backward compatibility. It allows developers to add new methods in interface with default implementations, and implementation classes does not to override them, making it easier to update and enhance libraries without causing distruptions in existing codebases. 
 
 // A simple program to Test Interface default 
 // methods in java 
@@ -1033,15 +1037,29 @@ IB1 in Jtc
 When we run the class with main method. jvm calls main method. Before invoking main method, jvm loads the class. While loading the class all static variables will be initialized and static blocks will be processed. Now, it will access the main method.
 
 
+Question: Yes, Java is a Platform Independent language. Unlike many programming languages javac compiler compiles the program to form a bytecode or .class file. This file is independent of the software or hardware running but needs a JVM(Java Virtual Machine) file preinstalled in the operating system for further execution of the bytecode.
 
 
+Question: What are the top Java Features?
+Ans:
+>Simple: Java is quite simple to understand.
+>Platform Independent
+>Interpreted: Java is interpreted as well as a compiler-based language. (JIT) 
+>Robust: features like Garbage collection, exception handling, etc that make the language robust.
+>Object-Oriented
+>Multithreaded
 
 
+Question: What is Robustness in java?
+Ans:
+Robustness is a quality of Java programs that ensures they can handle unexpected events and errors without crashing or causing harm. It is achieved through various mechanisms such as exception handling, garbage collection, and type checking.
 
-
-
-
-
+Question: Can we declare only variables inside interface?
+Ans
+Yes
+interface I1{
+  int i=10;
+}
 
 
 
