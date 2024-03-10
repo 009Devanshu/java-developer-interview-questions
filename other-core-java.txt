@@ -28,7 +28,7 @@ class Parent{
 	}
 }
 class Child extends Parent{
-	public static void m1() {	//static method of child class can not override static method of Parent class
+	public static void m1() {	//static method of child class can not override non-static method of Parent class
 		
 	}
 }
@@ -88,28 +88,45 @@ The static final variable can be initialized at the time of --->
 	
 
 ****************************************************************************************************************************************************************************************
-Question: What would be error in the below code?
-Ans
-class Hello{
-	int a;
-	final int b;
-	static final int c;
-	static {
-		System.out.println("SB in Hello");
-		
-	}
-	/*public Hello(){					Compiler will give error if immediate 
-		
-	}*/
-	static {
-		System.out.println("SB in Hello");
-		c=100;
-	}
-	public Hello(int b1) {
-		b=b1;
-	}
-}
+1: How string objects are created (See JTC Book)
+    Reference+Reference=Outside SCP
+    Reference+Literal=false
+    Literal+Reference=false
+    Literal+Literal=true
+---------------------------------------------------------------------------------------------
+2: How intern() method work? (see JTC Book)
 
+---------------------------------------------------------------------------------------------
+3: How do hashCode() and equals() method overridden in String class?
+Ans: hashCode() method inside String class is overridden on the basis of ASCII value whereas equals() method is overridden on the basis of content. 
+
+---------------------------------------------------------------------------------------------
+4: How compareTo() method is overridden inside String class?
+Ans:  
+Our String class implements Comparable interface and it has overridden the compareTo() method inside the String class. 
+This method is used to compare two strings character by character on the basic of it ASCII value. 
+If any one of the characters is not matching then it will return the difference of ASCII value and further comparison will not done. 
+It will return 0 when no difference is found. 
+
+---------------------------------------------------------------------------------------------
+5:: Difference between StringBuffer and String?
+Ans:
+1. StringBuffer objects are mutable in nature, i.e. if we perform any concatenation or other operation, it will modify the source. Whereas String is immutable. 
+2. Almost all the members of StringBuffer is synchronized so it affects concurrency of the application. Whereas members of String class are not synchronized.  
+3. StringBuffer does not uses any special memory location like string constant pool of String for the reusability of objects. 
+4. StringBuffer uses capacity concept in order to store the String (capacity=16). 
+5. StringBuffer object can not be created without new operator. Whereas String object can be created with string literal or new operator. 
+6. If the content is changing frequently then never recommended to go for String object because for every change, it will create a new object internally.  
+7. The main advantage of StringBuffer over String is that all required changes will be performed in the existing object instead of creating new object. 
+
+---------------------------------------------------------------------------------------------
+6:: Different types of Errors and Exceptions. What is the super type of exceptions and errors and super type of exceptions. [JTC Book]
+
+----------------------------------------------------------------------------------------------
+7:: Exception Chapter from JTC. 
+
+
+    
 
 
 

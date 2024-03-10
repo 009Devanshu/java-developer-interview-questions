@@ -1,0 +1,902 @@
+Question 1: What are the different data types present in javascript?
+--------------------------------------------------------------------------------------
+Ans:
+1] Primitive types
+-----------------------
+=> String
+=> Number - It represents a number and can be written with or without decimals.
+	var x = 3; //without decimal
+	var y = 3.6; //with decimal
+
+=> BigInt - This data type is used to store numbers which are above the limitation of the Number data type. It can store large integers and is represented by adding “n” to an integer literal.	
+	-const bigInt1 = 1234567890123456789012345678901234567890n;
+   	-const bigInt2 = BigInt("9876543210987654321098765432109876543210");
+	
+=> Boolean
+=> Undefined - When a variable is declared but not assigned, it has the value of undefined and it’s type is also undefined.
+var x; // value of x is undefined
+var y = undefined; // we can also set the value of a variable as undefined
+
+=> Null - It represents a non-existent or a invalid value.
+Example :
+var z = null;
+
+=> Symbol - It is new data type introduced in ES6 version of Javascript. It is used to generate a new and unique key. 
+//Symbols
+>  const sym1 = Symbol();
+console.log('Symbol is 'sym1)
+Output-- Symbol is Symbol()
+
+> const sym1 = Symbol('My identifier');
+console.log('Symbol is ',sym1);
+Output: Symbol is Symbol('My identifier');
+
+> const sym1 = new Symbol('My identifier');
+console.log('Symbol is ',sym1);
+Output: We will get error 
+        Symbol is not a constructor. 
+       
+> const sym1 = Symbol('My identifier');
+console.log('Type of symbol is ',typeof sym1);
+Output: Type of symbol is symbol
+That means type of symbol is primitive. 
+
+> const sym1 = Symbol('My identifier');
+const sym2 = Symbol('My identifier');
+console.log(sym1===sym2); //false
+
+> But
+  const a = 'this is';
+  const b = 'this is';
+  console.log(a===b); //true
+  
+  Same will happen with other primitives like number, undefined, null etc. 
+  console.log(null===null); //true
+  console.log(undefined===undefined);//true
+  if we don't have symbols in javascriptl, it was difficult to create unique keys using primitive data types. That's why symbol was introduced. 
+  
+> const k1 = Symbol();
+  const k2 = Symbol();
+  myObj={};
+  myObj[k1]="Harry";
+  myObj[k2]="Rohan";
+  console.log(myObj);
+  
+  Output: {Symbol():"Harry",Symbol():"Rohan"}
+  console.log(myObj[k1]);
+  Output: "Harry"
+  
+> const k1 = Symbol('identifier for k1');
+  const k2 = Symbol('for k2');
+  myObj={};
+  myObj[k1]="Harry";
+  myObje[k2]="Rohan";
+  console.log(myObj);
+  Output: {Symbol('identifier for k1'):"Harry",Symbol('for k2'):"Rohan"}
+  
+> console.log(myObj);
+  console.log(myObj[k1]);
+  console.log(myObj[k2]);
+  
+  console.log(myObj.k2);//can not do this to get Rohan because it is same as myObj["k2"]
+  Agar hamne dot(.) kar diya to wo Search karega k2 namak string ko. 
+  It is same as --> console.log(myObj["k2"]); 
+  So, we will get undefined. 
+  
+> const k1 = Symbol('identifier for k1');
+  const k2 = Symbol('for k2');
+  myObj={};
+  myObj[k1]="Harry";
+  myObj[k2]="Rohan";
+  myObj["name"]="Good boy";
+  
+  for(key in myObj){
+    console.log(key,myObj[key]);
+  }
+  Output: name Good boy
+  For in for in loop, Symbols are ignored. 
+  
+> To convert Object into JSON
+  console.log(JSON.stringify(myObj));
+  Output: {"name":"Good boy"}
+  So, Symbols are ignored. 
+  
+  
+Note: typeof operator is used to find type. 
+  typeof null //Returns "Object" (kind of a bug in javascript)
+  
+  
+[2] Non-primitive types
+Primitive data types can store only a single value. To store multiple and complex values, non-primitive data types are used.
+Object - Used to store collection of data.
+
+-------------------------------------------------------
+/ Collection of data in key-value pairs
+
+var obj1 = {
+   x:  43,
+   y:  "Hello world!",
+   z: function(){
+      return this.x;
+   }
+}
+      
+// Collection of data as an ordered list
+     
+var array1 = [5, "Hello", true, 4.1]; 
+---------------------------------------------------------
+
+Note- It is important to remember that any data type that is not a primitive data type, is of Object type in javascript.
+
+_________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________
+
+[2]  Explain Hoisting in javascript.
+Ans:
+Hoisting is the default behaviour of javascript where all the variable and function declarations are moved on top.
+This means that irrespective of where the variables and functions are declared, they are moved on top of the scope. The scope can be both local and global.
+
+Example 1:
+hoistedVariable = 3;
+console.log(hoistedVariable); // outputs 3 even when the variable is declared after it is initialized	
+var hoistedVariable;
+
+Example 2:
+hoistedFunction();  // Outputs " Hello world! " even when the function is declared after calling
+
+function hoistedFunction(){ 
+  console.log(" Hello world! ");
+} 
+
+
+Example 3:
+/ Hoisting takes place in the local scope as well
+function doSomething(){
+  x = 33;
+  console.log(x);
+  var x;
+} 
+doSomething(); // Outputs 33 since the local variable “x” is hoisted inside the local scope
+
+Note - Variable initializations are not hoisted, only variable declarations are hoisted:
+var x;
+console.log(x); // Outputs "undefined" since the initialization of "x" is not hoisted
+x = 23;
+
+Note - To avoid hoisting, you can run javascript in strict mode by using “use strict” on top of the code:
+"use strict";
+x = 23; // Gives an error since 'x' is not declared
+var x; 
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+3. Why do we use the word “debugger” in javascript?
+
+The debugger for the browser must be activated in order to debug the code. Built-in debuggers may be switched on and off, requiring the user to report faults. The remaining section of the code should stop execution before moving on to the next line while debugging.
+
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+4. Difference between “ == “ and “ === “ operators.
+Ans:
+Both are comparison operators. The difference between both the operators is that “==” is used to compare values whereas, “ === “ is used to compare both values and types.
+
+Example:
+var x = 2;
+var y = "2";
+(x == y)  // Returns true since the value of both x and y is the same
+(x === y) // Returns false since the typeof x is "number" and typeof y is "string"
+
+____________________________________________________________________________________________________________________
+____________________________________________________________________________________________________________________
+
+[5] Difference between var, let and const. 
+-----------------------------------------------------
+Ans:
+var: If we declare a variable from var, then we also declare it again with the same name, and if we want to reassign its value then we can do that too. 
+let: If we declare a variable with let, then we can not declare it again with the same name, but we can re-assign its value. 
+const: If we decalre a variable with const, then we can neither declare it again, nor can re-assign its value. 
+
+
+Scope:- var has a function scope or global scope if declared outside any function, let has a block scope. A block is denoted by curly braces {}. This means that variables declared with let are limited in scope to the block in which they are defined.
+
+// Example using var
+function exampleVar() {
+    if (true) {
+        var x = 10;
+    }
+    console.log(x); // Outputs: 10
+}
+
+// Example using let
+function exampleLet() {
+    if (true) {
+        let y = 20;
+    }
+    console.log(y); // ReferenceError: y is not defined
+}
+	
+	
+	
+[6] Explain Implicit Type Coercion in javascript.
+Ans:
+Implicit type coercion in javascript is the automatic conversion of value from one data type to another. It takes place when the operands of an expression are of different data types.
+
+=> String coercion
+String coercion takes place while using the ‘ + ‘ operator. When a number is added to a string, the number type is always converted to the string type.
+
+Example 1:
+var x = 3;
+var y = "3";
+x + y // Returns "33" 
+
+Example 2:
+var x = 24;
+var y = "Hello";
+x + y   // Returns "24Hello"; 
+
+When JavaScript sees that the operands of the expression x + y are of different types ( one being a number type and the other being a string type ), it converts the number type to the string type and then performs the operation. Since after conversion, both the variables are of string type, the ‘ + ‘ operator outputs the concatenated string “33” in the first example and “24Hello” in the second example.
+
+Note - Type coercion also takes place when using the ‘ - ‘ operator, but the difference while using ‘ - ‘ operator is that, a string is converted to a number and then subtraction takes place.
+
+var x = 3;
+Var y = "3";
+x - y    //Returns 0 since the variable y (string type) is converted to a number type	
+	
+=> Boolean Coercion
+All values except false, 0, 0n, -0, “”, null, undefined, and NaN are truthy values.
+
+If statements:
+Example:
+-----------
+var x = 0;
+var y = 23;
+        
+if(x) { console.log(x) }   // The code inside this block will not run since the value of x is 0(Falsy)  
+        
+if(y) { console.log(y) }    // The code inside this block will run since the value of y is 23 (Truthy)	
+	
+Logical operators:
+Logical operators in javascript, unlike operators in other programming languages, do not return true or false. They always return one of the operands.
+
+OR ( | | ) operator - If the first value is truthy, then the first value is returned. Otherwise, always the second value gets returned.
+
+AND ( && ) operator - If both the values are truthy, always the second value is returned. If the first value is falsy then the first value is returned or if the second value is falsy then the second value is returned.
+
+Example:
+--------------
+var x = 220;
+var y = "Hello";
+var z = undefined;
+        
+x | | y    // Returns 220 since the first value is truthy
+        
+x | | z   // Returns 220 since the first value is truthy
+        
+x && y    // Returns "Hello" since both the values are truthy
+        
+y && z   // Returns undefined since the second value is falsy
+        
+if( x && y ){ 
+  console.log("Code runs" ); // This block runs because x && y returns "Hello" (Truthy)
+}   
+        
+if( x || z ){
+  console.log("Code runs");  // This block runs because x || y returns 220(Truthy)
+}
+	
+=> Equality Coercion
+Equality coercion takes place when using ‘ == ‘ operator. 
+
+___________________________________________________________________________________________________________________
+___________________________________________________________________________________________________________________
+[7]. Is javascript a statically typed or a dynamically typed language?	
+Ans:
+JavaScript is a dynamically typed language. In a dynamically typed language, the type of a variable is checked during run-time in contrast to a statically typed language, where the type of a variable is checked during compile-time.
+
+A variable that is assigned a number type can be converted to a string type:	
+var a = 23;
+var a = "Hello World!";
+
+_____________________________________________________________________________________________________________________
+Question on Nan is left
+_____________________________________________________________________________________________________________________
+
+[9] Explain passed by value and passed by reference.	
+Ans:
+In JavaScript, primitive data types are passed by value and non-primitive data types are passed by reference.
+
+For understanding passed by value and passed by reference, we need to understand what happens when we create a variable and assign a value to it,
+var x = 2;
+In the above example, we created a variable x and assigned it a value of “2”. In the background, the “=” (assign operator) allocates some space in the memory, stores the value “2” and returns the location of the allocated memory space. Therefore, the variable x in the above code points to the location of the memory space instead of pointing to the value 2 directly.
+
+Assign operator dealing with primitive types:
+=================================================
+var y = 234;
+var z = y;
+In the above example, the assign operator knows that the value assigned to y is a primitive type (number type in this case), so when the second line code executes, where the value of y is assigned to z, the assign operator takes the value of y (234) and allocates a new space in the memory and returns the address. Therefore, variable z is not pointing to the location of variable y, instead, it is pointing to a new location in the memory.
+-----------------------------------------------------------------------------------
+var y = #8454; // y pointing to address of the value 234
+
+var z = y; 
+     
+var z = #5411; // z pointing to a completely new address of the value 234
+     
+// Changing the value of y
+y = 23;
+console.log(z);  // Returns 234, since z points to a new address in the memory so changes in y will not effect z
+------------------------------------------------------------------------------------
+From the above example, we can see that primitive data types when passed to another variable, are passed by value. Instead of just assigning the same address to another variable, the value is passed and new space of memory is created.
+
+Assign operator dealing with non-primitive types:
+=================================================================
+var obj = { name: "Vivek", surname: "Bisht" };
+var obj2 = obj;
+
+In the above example, the assign operator directly passes the location of the variable obj to the variable obj2. In other words, the reference of the variable obj is passed to the variable obj2.
+------------------------------------------------------------------------------------
+var obj = #8711;  // obj pointing to address of { name: "Vivek", surname: "Bisht" }
+var obj2 = obj;
+    
+var obj2 = #8711; // obj2 pointing to the same address 
+
+// changing the value of obj1
+        
+obj.name = "Akki";
+console.log(obj2);
+        
+// Returns {name:"Akki", surname:"Bisht"} since both the variables are pointing to the same address.
+---------------------------------------------------------------------------------------
+From the above example, we can see that while passing non-primitive data types, the assigned operator directly passes the address (reference).
+
+Therefore, non-primitive data types are always passed by reference.
+
+___________________________________________________________________________________________________________________
+___________________________________________________________________________________________________________________
+[10]. What is an Immediately Invoked Function in JavaScript?
+Ans:
+An Immediately Invoked Function ( known as IIFE and pronounced as IIFY) is a function that runs as soon as it is defined.
+
+Syntax of IIFE :
+=====================
+(function(){ 
+  // Do something;
+})();
+
+
+While executing javascript code, whenever the compiler sees the word “function”, it assumes that we are declaring a function in the code. Therefore, if we do not use the first set of parentheses, the compiler throws an error because it thinks we are declaring a function, and by the syntax of declaring a function, a function should always have a name.
+function() {
+  //Do something;
+}
+// Compiler gives an error since the syntax of declaring a function is wrong in the code above.
+
+To remove this error, we add the first set of parenthesis that tells the compiler that the function is not a function declaration, instead, it’s a function expression.
+
+The second set of parenthesis:
+====================================
+(function (){
+  //Do something;
+})();
+From the definition of an IIFE, we know that our code should run as soon as it is defined. A function runs only when it is invoked. If we do not invoke the function, the function declaration is returned:
+(function (){
+  // Do something;
+})
+
+// Returns the function declaration
+
+Therefore to invoke the function, we use the second set of parenthesis.
+	
+______________________________________________________________________________________________________
+______________________________________________________________________________________________________
+[12]. Explain Higher Order Functions in javascript.	
+Ans:
+Functions that operate on other functions, either by taking them as arguments or by returning them, are called higher-order functions.
+
+------------------------------------------------------------
+Examples of higher-order functions:
+======================================
+function higherOrder(fn) {
+  fn();
+}
+   
+higherOrder(function() { console.log("Hello world") });  
+
+
+
+function higherOrder2() {
+  return function() {
+    return "Do something";
+  }
+}      
+var x = higherOrder2();
+x()   // Returns "Do something"
+____________________________________________________________________________________________________
+____________________________________________________________________________________________________
+
+[13] First-class Function
+Ans
+A programming language is said to have First-class functions when functions in that language are treated like any other variable. For example, in such a language, a function can be passed as an argument to other functions, can be returned by another function and can be assigned as a value to a variable.
+
+-----------------------------------------------------------
+-----------------------------------------------------------
+Examples
+=============
+Assigning a function to a variable
+--------------------------------------
+
+const foo = () => {
+  console.log("foobar");
+};
+foo(); // Invoke it using the variable
+// foobar
+
+
+
+Passing a function as an argument
+----------------------------------------
+function sayHello() {
+  return "Hello, ";
+}
+function greeting(helloMessage, name) {
+  console.log(helloMessage() + name);
+}
+// Pass `sayHello` as an argument to `greeting` function
+greeting(sayHello, "JavaScript!");
+// Hello, JavaScript!
+
+Note: The function that we pass as an argument to another function is called a callback function. sayHello() is a callback function.
+
+
+
+Returning a function
+------------------------------------
+function sayHello() {
+  return () => {
+    console.log("Hello!");
+  };
+}
+
+______________________________________________________________________________________________________________
+______________________________________________________________________________________________________________
+[13]. Explain “this” keyword.
+Ans
+The “this” keyword refers to the object that the function is a property of.
+
+
+=============================================================
+function doSomething() {
+  console.log(this);
+}
+doSomething();
+
+In the above code, the function is a property of which object?
+
+Since the function is invoked in the global context, the function is a property of the global object.
+Therefore, the output of the above code will be the global object. Since we ran the above code inside the browser, the global object is the window object.
+
+Example 2:
+-----------------------
+var obj = {
+    name:  "vivek",
+    getName: function(){
+    console.log(this.name);
+  }
+}
+   
+obj.getName();
+In the above code, at the time of invocation, the getName function is a property of the object obj , therefore, this keyword will refer to the object obj, and hence the output will be “vivek”.
+
+Example 3:
+-------------------------
+ var obj = {
+    name:  "vivek",
+    getName: function(){
+    console.log(this.name);
+  }
+     
+}
+       
+var getName = obj.getName;
+       
+var obj2 = {name:"akshay", getName };
+obj2.getName();
+
+The output will be “akshay”.
+Although the getName function is declared inside the object obj, at the time of invocation, getName() is a property of obj2, therefore the “this” keyword will refer to obj2.
+
+______________________________________________________________________________________________________
+______________________________________________________________________________________________________
+[15]. Explain call(), apply() and, bind() methods.
+Ans
+1=> call()
+> It is a pre-defined method in javascript. 
+> It can be used to invoke a method(function) with an owner object as an argument.
+
+***********************************************
+***********************************************
+function sayHello(){
+  return "Hello " + this.name;
+}
+var obj = {name: "Sandy"};
+        
+sayHello.call(obj);
+        
+// Returns "Hello Sandy"	
+
+
+> With call(), an object can use a method belonging to another object.
+var person = {
+  age: 23,
+  getAge: function(){
+    return this.age;
+  }
+}        
+var person2 = {age:  54};
+person.getAge.call(person2);      
+// Returns 54  
+
+> The call() Method with Arguments
+The call() method can accept arguments
+
+const person = {
+  fullName: function(city, country) {
+    return this.firstName + " " + this.lastName + "," + city + "," + country;
+  }
+}
+
+const person1 = {
+  firstName:"John",
+  lastName: "Doe"
+}
+
+person.fullName.call(person1, "Oslo", "Norway");
+
+************************************************************************
+************************************************************************
+
+2=> apply()
+The apply method is similar to the call() method. The only difference is that,
+call() method takes arguments separately whereas, apply() method takes arguments as an array.
+
+**********************************************************
+function saySomething(message){
+  return this.name + " is " + message;
+}        
+var person4 = {name:  "John"};
+saySomething.apply(person4, ["awesome"]);
+***********************************************************
+
+
+3=> bind()
+This method returns a new function, where the value of “this” keyword will be bound to the owner object, which is provided as a parameter.
+
+**************************************************************
+var bikeDetails = {
+    displayDetails: function(registrationNumber,brandName){
+    return this.name+ " , "+ "bike details: "+ registrationNumber + " , " + brandName;
+  }
+}
+   
+var person1 = {name:  "Vivek"};
+     
+var detailsOfPerson1 = bikeDetails.displayDetails.bind(person1, "TS0122", "Bullet");
+      
+// Binds the displayDetails function to the person1 object
+        
+      
+detailsOfPerson1();
+//Returns Vivek, bike details: TS0122, Bullet
+*****************************************************************
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+
+[16]. What is the difference between exec () and test () methods in javascript?
+Ans
+=> test () and exec () are RegExp expression methods used in javascript. 
+We'll use exec () to search a string for a specific pattern, and if it finds it, it'll return the pattern directly; else, it'll return null.
+
+//////////////////////////////////////////////////////
+Example
+------------
+Search a string for the character "e":
+let text = "The best things in life are free";
+let result = /e/.exec(text);	//e
+
+Example
+-------------
+let text = "Hello world!";
+
+// Look for "Hello"
+let result1 = /Hello/.exec(text);  //Hello
+
+// Look for "W3Schools"
+let result2 = /W3Schools/.exec(text);  //null
+ 
+=> We will use a test () to find a string for a specific pattern. It will return the Boolean value 'true' on finding the given text otherwise, it will return 'false'.
+
+////////////////////////////////////////////////////////
+Example 1:
+---------------
+let text = "The best things in life are free"; let pattern = /e/;
+let result = pattern.test(text);  //true
+
+Example 2:
+-----------------
+// The string:
+let text = "Hello world!";
+
+// Look for "Hello"
+let pattern1 = /Hello/;
+let result1 = pattern1.test(text);
+console.log(result1); //true
+
+// Look for "W3Schools"
+let pattern2 = /W3Schools/;
+let result2 = pattern2.test(text);
+console.log(result2);  //false
+
+/////////////////////////////////////////////////////////////////
+
+___________________________________________________________________________________________________________
+___________________________________________________________________________________________________________
+
+[17]. What is currying in JavaScript?
+Ans:
+At its core, currying is a functional programming technique that involves breaking down a function that takes multiple arguments into a series of functions that take one argument each. This creates a chain of functions, where each function returns another function until the final result is achieved.
+
+Advantages of function Currying in JavaScript
+--------------------------------------------------
+1-Reusability: Currying breaks down a complex function into smaller, reusable units. Each curried function focuses on a single argument, making it easier to understand and maintain. These smaller functions can be reused across different parts of your codebase.
+
+
+=================================================================================
+//Now let's make this same add function as a Currying function.
+function add(num1) {
+  return function (num2) {
+    return function (num3) {
+      return num1 + num2 + num3;
+    };
+  };
+}
+const result = add(5)(10)(15);
+console.log(result);
+
+const result1 = add(5);
+console.log(result1);
+// Output
+// ƒ (num2) {
+//   return function (num3) {
+//     return num1 + num2 + num3;
+//   };
+// }
+const result2 = result1(10);
+console.log(result2);
+// Output
+// ƒ (num3) {
+//   return num1 + num2 + num3;
+// }
+const result3 = result2(15);
+console.log(result3); //30
+
+
+
+
+
+
+Here's how the currying works step by step:
+
+
+add(5) returns a function that takes the second number.
+add(5)(10) / result1(10) returns a function that takes the third number.
+add(5)(10)(15) returns the final result, which is the sum of all three numbers.
+This way, you can call the curried add function with each argument separately, creating a more modular and composable function.
+=====================================================================================
+=====================================================================================
+Currying using ES6 syntax in JavaScript:
+const add = num1=>num2=>num3=>num1+num2+num3;
+
+const result = add(5)(10)(15);
+console.log(result);
+======================================================================================
+======================================================================================
+Real life use case of Currying by accessing elements from a Object.
+//curried function to access a property of an object
+function prop(obj) {
+  return function (key) {
+    return obj[key];
+  };
+}
+
+//sample user object
+const user = {
+  name: "Alice",
+  age: 30,
+};
+
+//create curried function to access user properties
+const accessUser = prop(user);
+
+const userName = accessUser("name");
+const userAge = accessUser("age");
+
+console.log(userName + " " + userAge);
+==============================================================================
+
+==============================================================================
+Then What is Infinite Currying?
+In the following code we have converted the function to have infinite argument using some recursive nature as well. This allows you to create an infinite currying chain, where you can keep adding numbers as needed, and when you're ready to get the final result, just call the curried function with no arguments to compute the sum.
+
+function add(num1) {
+  return function (num2) {
+    if (num2) {
+      return add(num1 + num2);
+    }
+    return num1;
+  };
+}
+
+const result = add(5)(6)();
+console.log(result);
+
+
+
+Here's how the code works:
+The add function is defined to accept a single argument num1.
+Inside the add function, an inner function is returned. This inner function takes an argument num2.
+If num2 is provided (i.e., it's truthy), the inner function returns a recursive call to add with the sum of num1 and num2.
+If num2 is not provided (i.e., it's falsy, like undefined or 0), the inner function returns the accumulated num1.
+When the curried add function is called, it can be immediately invoked with the next argument, and this process can be repeated for as many arguments as needed.
+The final invocation of the curried add function is done with an empty set of parentheses (). This results in computing the accumulated sum of all previously provided numbers.
+The result is 11, which is the sum of 5 and 6.
+
+___________________________________________________________________________________________________________
+___________________________________________________________________________________________________________
+
+[19]. Explain Scope and Scope Chain in javascript.
+Ans:
+Scope in JS determines the accessibility of variables and functions at various parts of one’s code.
+
+There are three types of scopes in JS:
+-----------------------------------------
+Global Scope
+Local or Function Scope
+Block Scope
+
+------------------------------------------------------------
+----------------------
+Scope Chain 
+----------------------
+Let’s understand that using an example:
+var y = 24;
+
+function favFunction(){
+  var x = 667;
+  var anotherFavFunction = function(){
+    console.log(x); // Does not find x inside anotherFavFunction, so looks for variable inside favFunction, outputs 667
+  }
+
+  var yetAnotherFavFunction = function(){
+    console.log(y); // Does not find y inside yetAnotherFavFunction, so looks for variable inside favFunction and does not find it, so looks for variable in global scope, finds it and outputs 24
+  }
+
+  anotherFavFunction();
+  yetAnotherFavFunction();
+}
+favFunction();
+
+If the variable is not found in the global space as well, a reference error is thrown.
+-----------------------------------------------------------
+
+_________________________________________________________________________________________________________
+_________________________________________________________________________________________________________
+[20]. Explain Closures in JavaScript.
+Ans:
+Closures are an ability of a function to remember the variables and functions that are declared in its outer scope.
+
+
+
+----------------------------------------
+var Person = function(pName){
+  var name = pName;
+
+  this.getName = function(){
+    return name;
+  }
+}
+
+var person = new Person("Neelesh");
+console.log(person.getName());	//Output==> Neelesh  //Here, getName function is remembering the value name. 
+
+=>this is referring to the object person that we created using constructor(function) function. 
+So, if we do 
+console.log(person.name); //undefined
+Because, name is not the property of person object.
+
+
+
+But, 
+var Person = function (pName) {
+  this.name = pName;
+
+  this.getName = function () {
+    return this.name;
+  };
+};
+
+var person = new Person("Neelesh");
+console.log(person.getName());  //Neelesh
+console.log(person.name);  //Neelesh
+------------------------------------------
+
+
+
+
+------------------------------------------------------
+Let's understand closure by example--> 
+function randomFunc(){
+  var obj1 = {name:"Vivian", age:45};
+
+  return function(){
+    console.log(obj1.name + " is "+ "awesome"); // Has access to obj1 even when the randomFunc function is executed
+
+  }
+}
+
+var initialiseClosure = randomFunc(); // Returns a function
+
+initialiseClosure();  //Output==>  “Vivian is awesome"
+
+When the function randomFunc() runs, it seems that the returning function is using the variable obj1 inside it:
+Therefore randomFunc(), instead of destroying the value of obj1 after execution, saves the value in the memory for further reference. This is the reason why the returning function is able to use the variable declared in the outer scope even after the function is already executed.
+This ability of a function to store a variable for further reference even after it is executed is called Closure.
+
+--------------------------------------------------------
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+
+[22] What are object prototypes?
+Ans:
+A prototype is a blueprint of an object. The prototype allows us to use properties and methods on an object even if the properties and methods do not exist on the current object.
+         
+                   (properties and methods)
+bike.prototype=======================================>anotherbike = new bike();
+
+
+All javascript objects inherit properties from a prototype. For example,
+= Date objects inherit properties from the Date prototype
+= Math objects inherit properties from the Math prototype
+= Array objects inherit properties from the Array prototype.
+= On top of the chain is Object.prototype. Every prototype inherits properties and methods from the Object.prototype.
+
+
+================================================================================
+var arr = [];
+arr.push(2);
+
+console.log(arr); // Outputs [2]
+
+In the code above, as one can see, we have not defined any property or method called push on the array “arr” but the javascript engine does not throw an error.
+
+The reason is the use of prototypes. As we discussed before, Array objects inherit properties from the Array prototype.
+
+The javascript engine sees that the method push does not exist on the current array object and therefore, looks for the method push inside the Array prototype and it finds the method.
+
+Whenever the property or method is not found on the current object, the javascript engine will always try to look in its prototype and if it still does not exist, it looks inside the prototype's prototype and so on.
+
+==================================================================================
+
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+
+[23]. What are callbacks?
+Ans:
+
+
+ 
+
+
+
+
+
+
+

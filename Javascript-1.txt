@@ -1,0 +1,42 @@
+Question 1: What are the different data types present in javascript?
+--------------------------------------------------------------------------------------
+Ans:
+1] Primitive types
+-----------------------
+> String
+> Number - It represents a number and can be written with or without decimals.
+	var x = 3; //without decimal
+	var y = 3.6; //with decimal
+
+> 	
+
+	
+	
+Difference between var, let and const. 
+-----------------------------------------------------
+Ans:
+var: If we declare a variable from var, then we also declare it again with the same name, and if we want to reassign its value then we can do that too. 
+let: If we declare a variable with let, then we can not declare it again with the same name, but we can re-assign its value. 
+const: If we decalre a variable with const, then we can neither declare it again, nor can re-assign its value. 
+
+
+Scope:- var has a function scope or global scope if declared outside any function, let has a block scope. A block is denoted by curly braces {}. This means that variables declared with let are limited in scope to the block in which they are defined.
+
+// Example using var
+function exampleVar() {
+    if (true) {
+        var x = 10;
+    }
+    console.log(x); // Outputs: 10
+}
+
+// Example using let
+function exampleLet() {
+    if (true) {
+        let y = 20;
+    }
+    console.log(y); // ReferenceError: y is not defined
+}
+
+
+

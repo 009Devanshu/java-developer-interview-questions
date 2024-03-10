@@ -794,7 +794,7 @@ protected Object readResolve() {
 
 Question: What is serialization and Deserialization?
 Ans: 
-Serialization in java allows us to convert java object into stream that we can over the network or save into a file or database. Deserialization is the process of converting object stream into java object so that we can use it in our programe. 
+Serialization in java allows us to convert java object into stream that we can send over the network or save into a file or database. Deserialization is the process of converting object stream into java object so that we can use it in our programe. 
 In order to make a java object serializable, we need to implement java.io.Serializable. It is a markder interface. 
 import java.io.Serializable;
 
@@ -960,20 +960,6 @@ public class Foo extends AbstractFoo{
 	void bar() {}			(It is completely OK, because access modifier in both the methods (for super abstract class and child abstract class) is default. 
 }
 
-
-
-Question: 
-Below is the situattion:--
-Is it correct?
-public class Hello {
-		
-	{
-		
-		System.out.println(a);			
-	}
-	int a;
-	
-}
 
 
 Question: Below is the code. Find out what will be the output and why?
