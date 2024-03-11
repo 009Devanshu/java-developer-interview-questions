@@ -890,9 +890,424 @@ ________________________________________________________________________________
 
 [23]. What are callbacks?
 Ans:
+Functions that are used as an argument to another function are called callback functions. 
+
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+[24]. What are the types of errors in javascript?
+Ans:
+There are two types of errors in javascript.
+1=> Syntax error. 
+2=> Logical error : The application executes without problems in this case. However, the output findings are inaccurate. 
+
+_______________________________________________________________________________________________________
+_______________________________________________________________________________________________________
+
+[25]. What is memoization?
+Ans
+Memoization is a form of caching where the return value of a function is cached based on its parameters. If the parameter of that function is not changed, the cached version of the function is returned.
+
+Note- Memoization is used for expensive function calls but in the following example, we are considering a simple function for understanding the concept of memoization better.
+
+=========================================================
+function memoizedAddTo256() {
+  let cache = {};
+  return function (num) {
+    if (num in cache) {
+      console.log("Cached value");
+      return cache[num];
+    } else {
+      cache[num] = 256 + num;
+      return cache[num];
+    }
+  };
+}
+let memoizedFunc = memoizedAddTo256();
+
+const x = memoizedFunc(20);
+const y = memoizedFunc(20);
+console.log(x, y);
+===========================================================
+
+____________________________________________________________________________________________________
+____________________________________________________________________________________________________
+
+Note: 
+let aNum = {};
+aNum[x] = 240;  //Here, x is the key. 
+console.log(aNum[x]);  //240
+
+If we do, 
+console.log(aNum.x); //undefined
+because, aNum.x is like aNum["x"]
+
+____________________________________________________________________________________________________
+____________________________________________________________________________________________________
+[27]. What is the use of a constructor function in javascript?
+Ans
+Constructor functions are used to create objects in javascript.
+If we want to create multiple objects having similar properties and methods, constructor functions are used.
+
+========================================================
+function Person(name,age,gender){
+  this.name = name;
+  this.age = age;
+  this.gender = gender;
+}
 
 
- 
+var person1 = new Person("Vivek", 76, "male");
+console.log(person1);
+
+var person2 = new Person("Courtney", 34, "female");
+console.log(person2);
+==========================================================
+
+__________________________________________________________________________________________________________
+__________________________________________________________________________________________________________
+[28]. What is DOM?
+Ans:
+=> DOM stands for Document Object Model.  DOM is a programming interface for HTML and XML documents.
+=> When the browser tries to render an HTML document, it creates an object based on the HTML document called DOM. Using this DOM, we can manipulate or change various elements inside the HTML document.
+
+__________________________________________________________________________________________________________
+__________________________________________________________________________________________________________
+[29]. Which method is used to retrieve a character from a certain index?
+Ans:
+The charAt() function of the JavaScript string finds a char element at the supplied index. The index number begins at 0 and continues up to n-1, Here n is the string length.
+
+__________________________________________________________________________________________________________
+__________________________________________________________________________________________________________
+[30]. What do you mean by BOM?
+Ans
+Browser Object Model is known as BOM. It allows users to interact with the browser
+
+
+___________________________________________________________________________________________________________
+___________________________________________________________________________________________________________
+[31]. What are arrow functions?
+Ans
+==========================================================
+var obj1 = {
+  valueOfThis: function(){
+    return this;
+  }
+}
+var obj2 = {
+  valueOfThis: ()=>{
+    return this;
+  }
+}
+
+obj1.valueOfThis(); // Will return the object obj1
+obj2.valueOfThis(); // Will return window/global object
+
+
+
+The biggest difference between the traditional function expression and the arrow function is the handling of this keyword. By general definition, this keyword always refers to the object that is calling the function. As you can see in the code above, obj1.valueOfThis() returns obj1 since this keyword refers to the object calling the function.
+
+In the arrow functions, there is no binding of this keyword. This keyword inside an arrow function does not refer to the object calling it. It rather inherits its value from the parent scope which is the window object in this case. Therefore, in the code above, obj2.valueOfThis() returns the window object.
+
+
+============================================================
+
+__________________________________________________________________________________________________________
+__________________________________________________________________________________________________________
+
+[32]. What do mean by prototype design pattern?
+Ans
+The Prototype Design Pattern in JavaScript is a creational design pattern that is used for creating objects based on a prototype of an existing object through cloning. 
+The Prototype Pattern produces different objects, but instead of returning uninitialized objects, it produces objects that have values replicated from a template – or sample – object.
+
+===============================================================
+// Define a prototype object
+const carPrototype = {
+  brand: 'Toyota',
+  model: 'Corolla',
+  year: 2022,
+
+  // Method to describe the car
+  describe() {
+    return `${this.brand} ${this.model} (${this.year})`;
+  },
+
+  // Method to clone the object
+  clone() {
+    // Create a new object with the same prototype
+    const clone = Object.create(this);
+
+    // Optionally, you can customize the cloned object
+    // clone.someProperty = someValue;
+
+    return clone;
+  }
+};
+
+// Create a new car using the prototype
+const car1 = carPrototype.clone();
+console.log(car1.describe()); // Output: Toyota Corolla (2022)
+
+// Customize the cloned object
+car1.year = 2023;
+console.log(car1.describe()); // Output: Toyota Corolla (2023)
+
+// Create another car using the prototype
+const car2 = carPrototype.clone();
+console.log(car2.describe()); // Output: Toyota Corolla (2022)
+
+======================================================================
+
+___________________________________________________________________________________________
+___________________________________________________________________________________________
+
+[4]. What is the rest parameter and spread operator?
+Ans
+1=> Rest parameter ( … ):
+Using the rest parameter syntax, we can create functions that can take a variable number of arguments.
+Any number of arguments will be converted into an array using the rest parameter.
+============================================================
+function extractingArgs(...args){
+  return args[1];
+}
+
+// extractingArgs(8,9,1); // Returns 9
+
+function addAllArgs(...args){
+  let sumOfArgs = 0;
+  let i = 0;
+  while(i < args.length){
+    sumOfArgs += args[i];
+    i++;
+  }
+  return sumOfArgs;
+}
+
+addAllArgs(6, 5, 7, 99); // Returns 117
+addAllArgs(1, 3, 4); // Returns 8
+====================================================================================
+
+====================================================================================
+**Note- Rest parameter should always be used at the last parameter of a function:
+/ Incorrect way to use rest parameter
+function randomFunc(a,...args,c){
+//Do something
+}
+
+// Correct way to use rest parameter
+function randomFunc2(a,b,...args){
+//Do something
+}
+=====================================================================================
+
+2=> spread operator (...)
+spread operator is used to spreading an array, and object.
+
+===================================================================
+function addFourNumbers(num1,num2,num3,num4){
+  return num1 + num2 + num3 + num4;
+}
+
+let fourNumbers = [5, 6, 7, 8];
+
+
+addFourNumbers(...fourNumbers);
+// Spreads [5,6,7,8] as 5,6,7,8
+
+let array1 = [3, 4, 5, 6];
+let clonedArray1 = [...array1];
+// Spreads the array into 3,4,5,6
+console.log(clonedArray1); // Outputs [3,4,5,6]
+
+
+let obj1 = {x:'Hello', y:'Bye'};
+let clonedObj1 = {...obj1}; // Spreads and clones obj1
+console.log(obj1);
+
+let obj2 = {z:'Yes', a:'No'};
+let mergedObj = {...obj1, ...obj2}; // Spreads both the objects and merges it
+console.log(mergedObj);
+// Outputs {x:'Hello', y:'Bye',z:'Yes',a:'No'};
+====================================================================
+
+__________________________________________________________________________________________________
+__________________________________________________________________________________________________
+[5]. In JavaScript, how many different methods can you make an object?
+Ans
+In JavaScript, there are several ways to declare or construct an object.
+1=>Object Literal
+--------------------------
+const obj = { key: value };
+
+2=>Constructor Function:
+------------------------------
+
+function Car(brand, model) {
+    this.brand = brand;
+    this.model = model;
+}
+const car = new Car('Toyota', 'Corolla');
+
+3=>Object.create()
+--------------------------
+const obj = Object.create(proto);
+
+4=>Class Syntax
+----------------------
+class Car {
+    constructor(brand, model) {
+        this.brand = brand;
+        this.model = model;
+    }
+}
+const car = new Car('Toyota', 'Corolla');
+
+5=>Factory Function
+--------------------------
+function createCar(brand, model) {
+    return {
+        brand: brand,
+        model: model,
+        describe() {
+            return `${this.brand} ${this.model}`;
+        }
+    };
+}
+
+const car = createCar('Toyota', 'Corolla');
+
+_________________________________________________________________________________________________
+_________________________________________________________________________________________________
+
+[6]. What is the use of promises in javascript?
+Ans
+Promises are used to handle asynchronous operations in javascript.
+Promise object has four states -
+=> Pending - Initial state of promise. This state represents that the promise has neither been fulfilled nor been rejected, it is in the pending state.
+=> Fulfilled - This state represents that the promise has been fulfilled, meaning the async operation is completed.
+=> Rejected - This state represents that the promise has been rejected for some reason, meaning the async operation has failed.
+=> Settled - This state represents that the promise has been either rejected or fulfilled.
+
+A promise is created using the Promise constructor which takes in a callback function with two parameters, resolve and reject respectively.
+=> new Promise();
+resolve()==> Go to next action
+reject()==> Handle error
+
+=================================================================
+function sumOfThreeElements(...elements){
+  return new Promise((resolve,reject)=>{
+    if(elements.length > 3 ){
+      reject("Only three elements or less are allowed");
+    }
+    else{
+      let sum = 0;
+      let i = 0;
+      while(i < elements.length){
+        sum += elements[i];
+        i++;
+      }
+      resolve("Sum has been calculated: "+sum);
+    }
+  })
+}
+
+const xx = sumOfThreeElements(10, 20, 30);
+console.log(xx);
+Output:-
+Promise {<fulfilled>: 'Sum has been calculated 60'}
+=====================================================================
+
+We can consume any promise by attaching then() and catch() methods to the consumer.
+
+then() method is used to access the result when the promise is fulfilled.
+
+catch() method is used to access the result/error when the promise is rejected. In the code below, we are consuming the promise:
+
+======================================================================
+sumOfThreeElements(4, 5, 6)
+.then(result=> console.log(result))
+.catch(error=> console.log(error));
+// In the code above, the promise is fulfilled so the then() method gets executed
+======================================================================
+___________________________________________________________________________________________________
+___________________________________________________________________________________________________
+[7]. What are classes in javascript?
+Ans
+Introduced in the ES6 version, classes are nothing but syntactic sugars for constructor functions. They provide a new way of declaring constructor functions in javascript. 
+
+============================================================
+// Before ES6 version, using constructor functions
+function Student(name,rollNumber,grade,section){
+  this.name = name;
+  this.rollNumber = rollNumber;
+  this.grade = grade;
+  this.section = section;
+}
+
+// Way to add methods to a constructor function
+Student.prototype.getDetails = function(){
+  return `Name: ${this.name}, Roll no: ${this.rollNumber}, Grade: ${this.grade}, Section:${this.section}`;
+}
+
+
+let student1 = new Student("Vivek", 354, "6th", "A");
+student1.getDetails();
+// Returns Name: Vivek, Roll no:354, Grade: 6th, Section:A
+=========================================================================
+
+=========================================================================
+This is also correct==> 
+// Before ES6 version, using constructor functions
+function Student(name, rollNumber, grade, section) {
+  this.name = name;
+  this.rollNumber = rollNumber;
+  this.grade = grade;
+  this.section = section;
+  this.getDetails = function () {
+    return `Name: ${this.name}, Roll no: ${this.rollNumber}, Grade: ${this.grade}, Section:${this.section}`;
+  };
+}
+
+let student1 = new Student("Vivek", 354, "6th", "A");
+const x = student1.getDetails();
+console.log(x);
+Output==> Name: Vivek, Roll no: 354, Grade: 6th, Section:A
+===========================================================================
+
+===========================================================================
+// ES6 version classes
+class Student{
+  constructor(name,rollNumber,grade,section){
+    this.name = name;
+    this.rollNumber = rollNumber;
+    this.grade = grade;
+    this.section = section;
+  }
+
+  // Methods can be directly added inside the class
+  getDetails(){
+    return 'Name: ${this.name}, Roll no: ${this.rollNumber}, Grade:${this.grade}, Section:${this.section}';
+  }
+}
+
+let student2 = new Student("Garry", 673, "7th", "C");
+student2.getDetails();
+// Returns Name: Garry, Roll no:673, Grade: 7th, Section:C
+===============================================================================
+Key points to remember about classes:
+=>Unlike functions, classes are not hoisted. A class cannot be used before it is declared.
+=>A class can inherit properties and methods from other classes by using the extend keyword.
+=>All the syntaxes inside the class must follow the strict mode(‘use strict’) of javascript. An error will be thrown if the strict mode rules are not followed.
+
+_____________________________________________________________________________________________________
+_____________________________________________________________________________________________________
+
+
+
+
+
+
+
+
 
 
 
