@@ -127,6 +127,376 @@ function random(){
   x = 21; // Initialization of x
 }
 
+____________________________________________________________________________________________________
+____________________________________________________________________________________________________
+[4]. Guess the outputs of the following code:
+Ans
+=======================================================
+// Code 1
+
+  let hero = {
+    powerLevel: 99,
+    getPower(){
+      return this.powerLevel;
+    }
+  }
+  
+  let getPower = hero.getPower;
+  
+  let hero2 = {powerLevel:42};
+  console.log(getPower());
+  console.log(getPower.apply(hero2));
+
+Output--> 
+undefined
+42
+
+=========================================================
+
+==========================================================================
+SIDE NOTE:--
+
+What is the difference between hero.getPower() and hero.getPower 
+In JavaScript, hero.getPower() and hero.getPower represent different concepts and behaviors:
+
+1==> hero.getPower(): This is a function call. When you use parentheses () after a function reference like hero.getPower(), you're invoking the function. In this case, you're calling the getPower method of the hero object.
+
+let hero = {
+    powerLevel: 99,
+    getPower() {
+        return this.powerLevel;
+    }
+};
+console.log(hero.getPower()); // This will call the getPower method of the hero object and print its return value.
+
+
+2==> hero.getPower: This is a reference to the function itself. When you reference a method without the parentheses, you're just referring to the function object itself, not invoking it.
+
+let hero = {
+    powerLevel: 99,
+    getPower() {
+        return this.powerLevel;
+    }
+};
+let getPowerFunction = hero.getPower;
+console.log(getPowerFunction); // This will print the function definition of getPower.
+In this case, getPowerFunction will hold a reference to the getPower method of the hero object, but it won't execute the function. To execute the function, you need to use () to call it.
+
+======================================================================================
+
+======================================================================================
+ // Code 2
+  
+  const a = function(){
+    console.log(this);
+  
+    const b = {
+      func1: function(){
+        console.log(this);
+      }  
+    }
+  
+    const c = {
+      func2: ()=>{
+        console.log(this);
+      }
+    }
+  
+    b.func1();
+    c.func2();
+  }
+  
+  a();
+  
+Ouput--> 
+global/window object
+object "b"
+global/window object
+
+
+Since we are using the arrow function inside func2, this keyword refers to the global object.
+
+======================================================================================
+
+======================================================================================
+// code 3
+const b = {
+  name: "Vivek",
+  f: function () {
+    var self = this;
+    console.log(this.name);
+    (function () {
+      console.log(this.name);
+      console.log(self.name);
+    })();
+  },
+};
+b.f();
+
+Output--> 
+Vivek
+undefined
+vivek
+
+But
+const b = {
+  name: "Vivek",
+  f: function () {
+    var self = this;
+    console.log(this.name);
+    (() => {
+      console.log(this.name);
+      console.log(self.name);
+    })();
+  },
+};
+b.f();
+Output--> 
+vivek
+vivek
+vivek
+
+
+(But, I have doubt in this question)
+
+_________________________________________________________________________________________
+_________________________________________________________________________________________
+
+[5] Guess the outputs of the following code:
+**Note - Code 2 and Code 3 require you to modify the code, instead of guessing the output.
+
+Ans
+==============================================================
+// Code 1
+
+(function(a){
+  return (function(){
+    console.log(a);
+    a = 23;
+  })()
+})(45);
+
+Output---> 
+45
+Even though a is defined in the outer function, due to closure the inner functions have access to it.
+================================================================
+
+================================================================
+// Code 2
+
+// Each time bigFunc is called, an array of size 700 is being created,
+// Modify the code so that we don't create the same array again and again
+
+function bigFunc(element){
+  let newArray = new Array(700).fill('♥');
+  return newArray[element];
+}
+
+console.log(bigFunc(599)); // Array is created
+console.log(bigFunc(670)); // Array is created again
+
+
+Modifying Code--> 
+---------------
+function bigFunc(element) {
+  let newArray = new Array(700).fill("♥");
+  return (element) => newArray[element];
+}
+
+let getElement = bigFunc();
+console.log(getElement(599));
+console.log(getElement(670));
+
+=======================================================================
+
+=======================================================================
+// Code 3
+
+// The following code outputs 2 and 2 after waiting for one second
+// Modify the code to output 0 and 1 after one second.
+
+function randomFunc(){
+  for(var i = 0; i < 2; i++){
+    setTimeout(()=> console.log(i),1000);
+  }
+}
+randomFunc();
+
+
+It can be modified in two ways:-
+Using let keyword:
+----------------------
+function randomFunc(){
+  for(let i = 0; i < 2; i++){
+    setTimeout(()=> console.log(i),1000);
+  }
+}
+randomFunc(); 
+
+
+
+Using closure:
+------------------
+function randomFunc(){
+  for(var i = 0; i < 2; i++){
+  (function(i){
+      setTimeout(()=>console.log(i),1000);
+    })(i);
+  }
+}
+randomFunc();
+
+This IIFE is used to create a closure over the current value of i, ensuring that each iteration of the loop maintains its own copy of i.
+
+========================================================================
+_________________________________________________________________________________________
+
+[6]. Write a function that performs binary search on a sorted array.
+Ans
+function binarySearch(arr, value, startPos, endPos) {
+  if (startPos > endPos) return -1;
+
+  let middleIndex = Math.floor((startPos + endPos) / 2);
+
+  if (arr[middleIndex] === value) return middleIndex;
+  else if (arr[middleIndex] > value) {
+    return binarySearch(arr, value, startPos, middleIndex - 1);
+  } else {
+    return binarySearch(arr, value, middleIndex + 1, endPos);
+  }
+}
+
+_________________________________________________________________________________________
+_________________________________________________________________________________________
+[7] mplement a function that returns an updated array with r right rotations on an array of integers a . 
+Ans
+function rotateRight(arr,rotations){
+  if(rotations == 0) return arr;
+  for(let i = 0; i < rotations;i++){
+    let element = arr.pop();
+    arr.unshift(element);
+  }
+  return arr;
+}
+rotateRight([2, 3, 4, 5, 7], 3); // Return [4,5,7,2,3]
+rotateRight([44, 1, 22, 111], 5); // Returns [111,44,1,22]  s
+
+_________________________________________________________________________________________
+_________________________________________________________________________________________
+[8] Write the code given If two strings are anagrams of one another, then return true.
+Solution--> 
+-------------
+function isAnagram(one, two) {
+  //Change both words to lowercase for case insensitivity..
+  var a = one.toLowerCase();
+  var b = two.toLowerCase();
+
+  // Sort the strings, then combine the array to a string. Examine the outcomes.
+  a = a.split("").sort().join("");
+  b = b.split("").sort().join("");
+
+  return a === b;
+}
+var firstWord = "Deepak";
+var secondWord = "Aman";
+isAnagram(firstWord, secondWord); //false
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+[9] Write the code to find the vowels
+
+Solution:-
+const findVowels = str => {
+  let count = 0
+  const vowels = ['a', 'e', 'i', 'o', 'u']
+  for(let char of str.toLowerCase()) {
+    if(vowels.includes(char)) {
+      count++
+    }
+  }
+  return count
+}
+
+_________________________________________________________________________________________
+_________________________________________________________________________________________
+[10] In JavaScript, how do you turn an Object into an Array []?
+Solution:
+let obj = { id: "1", name: "user22", age: "26", work: "programmer" };
+
+//Method 1: Convert the keys to Array using - Object.keys()
+console.log(Object.keys(obj));
+// ["id", "name", "age", "work"]
+
+// Method 2 Converts the Values to Array using - Object.values()
+console.log(Object.values(obj));
+// ["1", "user22r", "26", "programmer"]
+
+// Method 3 Converts both keys and values using - Object.entries()
+console.log(Object.entries(obj));
+//[["id", "1"],["name", "user22"],["age", "26"],["work", “programmer"]]
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+[11] What is the output of the following code?
+
+const b = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+for (let i = 0; i < 10; i++) {
+  setTimeout(() => console.log(b[i]), 1000);
+}
+for (var i = 0; i < 10; i++) {
+  setTimeout(() => console.log(b[i]), 1000);
+}
+
+Solution:
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+_________________________________________________________________________________________
+_________________________________________________________________________________________
+What is closure? 
+Ans
+Closure is a function along with its lexical environment. 
+
+========================================
+function init() {
+  var name = "Mozilla";
+  function displayName() {
+    console.log(name);
+  }
+  name = "Harry";
+  return displayName;
+}
+
+let c = init();
+c();
+========================================
+
+
+
+
+
+
+
+
+
+
 
 
 
