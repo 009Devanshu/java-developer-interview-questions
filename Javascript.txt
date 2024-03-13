@@ -1301,6 +1301,248 @@ Key points to remember about classes:
 _____________________________________________________________________________________________________
 _____________________________________________________________________________________________________
 
+[8]. What are generator functions?
+Ans
+Generator functions are special class of functions. 
+They can be stopped midway and then continue from where they had stopped. 
+Generator functions are declared with the function* keyword instead of the normal function keyword:
+function* genFunc(){
+  // Perform operation
+}
+
+In normal functions, we use the return keyword to return a value and as soon as the return statement gets executed, the function execution stops:
+function normalFunc(){
+  return 22;
+  console.log(2); // This line of code does not get executed
+}
+
+In the case of generator functions, when called, they do not execute the code, instead, they return a generator object. This generator object handles the execution.
+function* genFunc(){
+  yield 3;
+  yield 4;
+}
+genFunc(); // Returns Object [Generator] {}
+
+The generator object consists of a method called next(), this method when called, executes the code until the nearest yield statement, and returns the yield value.
+
+For example, if we run the next() method on the above code:
+genFunc().next(); // Returns {value: 3, done:false}
+
+As one can see the next method returns an object consisting of a value and done properties.  Value property represents the yielded value. Done property tells us whether the function code is finished or not. (Returns true if finished).
+
+As one can see the next method returns an object consisting of a value and done properties.  Value property represents the yielded value. Done property tells us whether the function code is finished or not. (Returns true if finished).
+
+Generator functions are used to return iterators. Let’s see an example where an iterator is returned:
+function* iteratorFunc() {
+  let count = 0;
+  for (let i = 0; i < 2; i++) {
+      count++;
+      yield i;
+  }
+  return count;
+}
+
+let iterator = iteratorFunc();
+console.log(iterator.next()); // {value:0,done:false}
+console.log(iterator.next()); // {value:1,done:false}
+console.log(iterator.next()); // {value:2,done:true}
+As you can see in the code above, the last line returns done:true, since the code reaches the return statement.
+
+__________________________________________________________________________________________________________
+__________________________________________________________________________________________________________
+
+[9]. Explain WeakSet in javascript.
+Ans
+In javascript, a Set is a collection of unique and ordered elements.  Just like Set, WeakSet is also a collection of unique and ordered elements with some key differences:
+=> Weakset contains only objects and no other type.
+=> An object inside the weakset is referenced weakly. This means, that if the object inside the weakset does not have a reference, it will be garbage collected.
+=> Unlike Set, WeakSet only has three methods, add() , delete() and has() .
+
+==================================================================
+const newSet = new Set([4, 5, 6, 7]);
+console.log(newSet);// Outputs Set {4,5,6,7}
+
+const newSet2 = new WeakSet([3, 4, 5]); //Throws an error
+
+
+let obj1 = {message:"Hello world"};
+const newSet3 = new WeakSet([obj1]);
+console.log(newSet3.has(obj1)); // true
+
+==================================================================
+
+____________________________________________________________________________________________________________
+____________________________________________________________________________________________________________
+[11]. Explain WeakMap in javascript.
+Ans
+In javascript, Map is used to store key-value pairs. The key-value pairs can be of both primitive and non-primitive types. WeakMap is similar to Map with key differences:
+
+The keys and values in weakmap should always be an object.
+If there are no references to the object, the object will be garbage collected.
+
+==========================================================
+const map1 = new Map();
+map1.set('Value', 1);
+
+const map2 = new WeakMap();
+map2.set('Value', 2.3); // Throws an error
+
+let obj = {name:"Vivek"};
+const map3 = new WeakMap();
+map3.set(obj, {age:23});
+==========================================================
+
+________________________________________________________________________________________________________
+________________________________________________________________________________________________________
+[12]. What is Object Destructuring?
+Ans
+Object destructuring is a way to extract elements from an object or an array.
+
+
+=======================================================
+=> Object destructuring: Before ES6 version:
+
+const classDetails = {
+  strength: 78,
+  benches: 39,
+  blackBoard:1
+}
+
+const classStrength = classDetails.strength;
+const classBenches = classDetails.benches;
+const classBlackBoard = classDetails.blackBoard;
+
+========================================================
+
+
+========================================================
+=> The same example using object destructuring:
+
+const classDetails = {
+  strength: 78,
+  benches: 39,
+  blackBoard:1
+}
+
+const {strength:classStrength, benches:classBenches,blackBoard:classBlackBoard} = classDetails;
+
+console.log(classStrength); // Outputs 78
+console.log(classBenches); // Outputs 39
+console.log(classBlackBoard); // Outputs 1
+=========================================================
+
+As one can see, using object destructuring we have extracted all the elements inside an object in one line of code. If we want our new variable to have the same name as the property of an object we can remove the colon:
+const {strength} = classDetails;
+
+=========================================================
+Array destructuring: Before ES6 version:
+
+const arr = [1, 2, 3, 4];
+const first = arr[0];
+const second = arr[1];
+const third = arr[2];
+const fourth = arr[3];
+==========================================================
+
+==========================================================
+The same example using object destructuring:
+
+const arr = [1, 2, 3, 4];
+const [first,second,third,fourth] = arr;
+console.log(first); // Outputs 1
+console.log(second); // Outputs 2
+console.log(third); // Outputs 3
+console.log(fourth); // Outputs 4
+===========================================================
+
+_______________________________________________________________________________________________________
+_______________________________________________________________________________________________________
+
+[13]. Difference between prototypal and classical inheritance
+Ans
+A prototype serves as a template for other objects and are cloned via an object linking method Object.create(proto). 
+======================================================
+// Creating an object
+let person = {
+    name: 'John',
+    age: 30,
+    greet() {
+        console.log('Hello, my name is ' + this.name);
+    }
+};
+
+// Creating another object inheriting from 'person'
+let student = Object.create(person);
+student.major = 'Computer Science';
+
+// Accessing properties and methods
+console.log(student.name); // 'John'
+student.greet(); // 'Hello, my name is John'
+==================================================================
+
+Classical inheritence is based on the concept of classes and is commanly associated with languages like java and c++.
+In classical inheritence, class acts as a blueprint and define properties and behaviour whereas object is the real entity of a class.  and inheritance is achieved through class hierarchies.
+
+==================================================================
+JavaScript didn't support classical inheritance until the introduction of ES6 (ECMAScript 2015) with the class syntax. However, under the hood, it still uses prototypal inheritance.
+
+// ES6 class syntax
+class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    greet() {
+        console.log('Hello, my name is ' + this.name);
+    }
+}
+
+// Inheriting from the Person class
+class Student extends Person {
+    constructor(name, age, major) {
+        super(name, age);
+        this.major = major;
+    }
+}
+
+// Creating an object
+let student = new Student('John', 30, 'Computer Science');
+
+// Accessing properties and methods
+console.log(student.name); // 'John'
+student.greet(); // 'Hello, my name is John'
+==================================================================
+
+______________________________________________________________________________________________________
+______________________________________________________________________________________________________
+[14] What is a Temporal Dead Zone?
+Ans
+Temporal Dead Zone is a behaviour that occurs with variables declared using let and const keywords. It is a behaviour where we initialize or access it before declaration. Examples of temporal dead zone:
+
+===================================================
+x = 23; // Gives reference error
+
+let x;
+
+function anotherRandomFunc(){
+  message = "Hello"; // Throws a reference error
+
+  let message;
+}
+anotherRandomFunc();
+====================================================
+
+________________________________________________________________________________________________________
+________________________________________________________________________________________________________
+
+[15] What is the role of deferred scripts in JavaScript?
+Ans
+When you include a script using the defer attribute in an HTML document, it tells the browser to download the script in the background while the rest of the page continues to load. his reduces the time it takes for web pages to load, allowing them to appear more quickly.
+
+
+
+
+
 
 
 
